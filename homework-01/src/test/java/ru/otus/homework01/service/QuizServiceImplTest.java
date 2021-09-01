@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.otus.homework01.dao.QuizData;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @DisplayName("Класс QuizServiceImpl")
 class QuizServiceImplTest {
 
