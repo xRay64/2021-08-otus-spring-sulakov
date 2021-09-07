@@ -7,6 +7,7 @@ public class Question {
     private final String questionText;
     private Map<Integer, String> responses = new HashMap<>();
     private int rightResponseIndex;
+    private String rightResponseString;
 
     public Question(String questionText) {
         this.questionText = questionText;
@@ -29,8 +30,19 @@ public class Question {
         this.rightResponseIndex = rightResponseIndex;
     }
 
-    public boolean checkResponse(int responseIndex) {
+    public void setRightResponseString(String rightResponseString) {
+        this.rightResponseString = rightResponseString;
+    }
+
+    public boolean needTextAnswer() {
+        return rightResponseString != null;
+    }
+    public boolean checkResponseIndex(int responseIndex) {
         return rightResponseIndex == responseIndex;
+    }
+
+    public boolean checkResponseString(String responseString) {
+        return responseString.toLowerCase().contains(rightResponseString.toLowerCase());
     }
 
     @Override

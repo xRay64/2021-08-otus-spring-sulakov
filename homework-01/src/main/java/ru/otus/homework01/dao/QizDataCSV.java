@@ -1,39 +1,59 @@
 package ru.otus.homework01.dao;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 import ru.otus.homework01.domain.Question;
 import ru.otus.homework01.helper.StringParser;
 
-import java.io.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
-public class QizDataCSV implements QuizData{
+@PropertySource("classpath:application.properties")
+@Component
+public class QizDataCSV implements QuizData {
 
-    private final BufferedReader reader;
+    private final String fileName;
+    private final StringParser stringParser;
+    private List<String> dataList = new ArrayList<>();
+    private int currentDataRow = 0;
 
-    public QizDataCSV(String fileName) {
-        this.reader = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(fileName)));
+    public QizDataCSV(@Value("${csv.filename}") String fileName, StringParser stringParser) {
+        this.fileName = fileName;
+        this.stringParser = stringParser;
     }
 
     @Override
-    public boolean hasNext(){
-        boolean res = false;
+    public void prepareData() {
+        Stream<String> stringStream = null;
         try {
-            res = reader.ready();
-        } catch (IOException e) {
-            System.out.println("Error in hasNext");
+            stringStream = Files.lines(Paths.get(ClassLoader.getSystemResource(fileName).toURI()));
+        } catch (IOException | URISyntaxException e) {
+            System.out.println("Error in prepareData");
             e.printStackTrace();
         }
-        return res;
+        if (stringStream != null) {
+            stringStream.forEach(s -> dataList.add(s));
+            stringStream.close();
+        } else {
+            System.out.println("Error while parse a csv");
+        }
+    }
+
+    @Override
+    public boolean hasNext() {
+        return currentDataRow < dataList.size();
     }
 
     @Override
     public Question getNextQuestion() {
-        Question resQuestion = null;
-        try {
-            resQuestion = StringParser.parseStringToQuestion(reader.readLine());
-        } catch (IOException e) {
-            System.out.println("Error in getNextQuestion");
-            e.printStackTrace();
-        }
-        return resQuestion;
+        Question question = stringParser.parseStringToQuestion(dataList.get(currentDataRow));
+        currentDataRow++;
+        return question;
     }
 }

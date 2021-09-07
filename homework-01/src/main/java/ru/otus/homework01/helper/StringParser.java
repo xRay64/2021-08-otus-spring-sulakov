@@ -1,9 +1,11 @@
 package ru.otus.homework01.helper;
 
+import org.springframework.stereotype.Component;
 import ru.otus.homework01.domain.Question;
 
+@Component
 public final class StringParser {
-    public static Question parseStringToQuestion(String inputString) {
+    public Question parseStringToQuestion(String inputString) {
         String[] strings = inputString.split(";");
         if (strings.length == 0) {
             throw new StringParserException("The inputString is empty");
@@ -11,10 +13,23 @@ public final class StringParser {
         Question question = new Question(strings[0]);
 
         if (strings.length >= 1)
-        for (int i = 1; i < strings.length; i++) {
-            question.addResponse(strings[i]);
-        }
-
+            if (strings.length == 2) {
+                //Если в массиве всего два вхождения - то это вопрос с текстовым ответом, т.е. первое вхождение это вопрос
+                //а второе это ответ на него
+                //сохраним текстовый ответ
+                question.setRightResponseString(strings[1]);
+            } else {
+                //Иначе это вопрос с авриантами ответов
+                for (int i = 1; i < strings.length; i++) {
+                    String currentProcessingString = strings[i];
+                    if (currentProcessingString.startsWith("*")) {
+                        question.setRightResponseIndex(i); //Зададим индекс правильного ответа
+                        question.addResponse(currentProcessingString.substring(1)); //Обрежем префикс правильного ответа '*'
+                    } else {
+                        question.addResponse(strings[i]);
+                    }
+                }
+            }
         return question;
     }
 }
