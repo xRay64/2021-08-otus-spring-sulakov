@@ -17,12 +17,10 @@ public class UserInteractionServiceImpl implements UserInteractionService{
 
     @Override
     public String askUserForString(String message) {
-//        reader = new BufferedReader(new InputStreamReader(System.in));
         String answer = null;
         System.out.println(message);
         try {
             answer = reader.readLine();
-//            reader.close();
         } catch (IOException e) {
             System.out.println("Error while reading user answer");
             e.printStackTrace();
@@ -32,12 +30,10 @@ public class UserInteractionServiceImpl implements UserInteractionService{
 
     @Override
     public int askUserForInt(String message) {
-//        reader = new BufferedReader(new InputStreamReader(System.in));
         int answerInt = -1;
         System.out.println(message);
         try {
             answerInt = Integer.parseInt(reader.readLine());
-//            reader.close();
         } catch (NumberFormatException e) {
             System.out.println("Wrong number. Please enter a correct number of answer.");
             this.askUserForInt(message);

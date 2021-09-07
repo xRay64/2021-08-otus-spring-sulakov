@@ -14,6 +14,7 @@ public class QuizServiceImpl implements QuizService {
     private final UserInteractionService userInteractionService;
     private final int scoreToWin;
     private User user;
+    private int countOfAskedQuestions;
 
     public QuizServiceImpl(QuizData quizDataCSV, UserInteractionService userInteractionService, @Value("${quiz.score-to-vin}") int scoreToWin) {
         this.quizData = quizDataCSV;
@@ -48,6 +49,7 @@ public class QuizServiceImpl implements QuizService {
                     user.upScore();
                 }
             }
+            countOfAskedQuestions++;
         }
         //возьмем паузу на подсчет очков
         userInteractionService.promptUser("Let me think...");
@@ -59,10 +61,13 @@ public class QuizServiceImpl implements QuizService {
             }
             userInteractionService.promptUser("...");
         }
+
+        int resultPercent = 100 / countOfAskedQuestions * user.getScore();
+
         if (user.getScore() >= scoreToWin) {
-            System.out.println("Congrats!!! You are win!");
+            System.out.printf("Congrats!!! You are win!\nWith result: %d%n", resultPercent);
         } else {
-            System.out.println("Sorry :( You are looser.");
+            System.out.printf("Sorry :( You are looser.\nWith result: %d%n", resultPercent);
         }
     }
 
