@@ -1,7 +1,9 @@
 package ru.otus.homework01.helper;
 
+import org.springframework.stereotype.Component;
 import ru.otus.homework01.domain.Question;
 
+@Component
 public final class StringParser {
     public Question parseStringToQuestion(String inputString) {
         String[] strings = inputString.split(";");
