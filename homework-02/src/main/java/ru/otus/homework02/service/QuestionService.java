@@ -1,9 +1,8 @@
-package ru.otus.homework02.dao;
+package ru.otus.homework02.service;
 
 import ru.otus.homework02.domain.Question;
 
-public interface QuizData {
-    void prepareData();
+public interface QuestionService {
     boolean hasNext();
     Question getNextQuestion();
 }

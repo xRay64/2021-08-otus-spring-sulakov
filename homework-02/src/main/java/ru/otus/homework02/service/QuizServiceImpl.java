@@ -2,34 +2,30 @@ package ru.otus.homework02.service;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import ru.otus.homework02.config.AppConfig;
-import ru.otus.homework02.dao.QuizData;
+import ru.otus.homework02.config.QuizConfig;
 import ru.otus.homework02.domain.Question;
 import ru.otus.homework02.domain.User;
 
 import java.util.Locale;
 
-//@PropertySource("classpath:application.yml")
 @Service
 public class QuizServiceImpl implements QuizService {
-    private final QuizData quizData;
+    private final QuestionService questionService;
     private final UserInteractionService userInteractionService;
     private final int scoreToWin;
     private User user;
     private int countOfAskedQuestions;
     private MessageSource messageSource;
 
-    public QuizServiceImpl(QuizData quizDataCSV, UserInteractionService userInteractionService, AppConfig appConfig, MessageSource messageSource) {
-        this.quizData = quizDataCSV;
+    public QuizServiceImpl(QuestionService questionService, UserInteractionService userInteractionService, QuizConfig quizConfig, MessageSource messageSource) {
+        this.questionService = questionService;
         this.userInteractionService = userInteractionService;
-        this.scoreToWin = appConfig.getQuiz().getScoreToWin();
+        this.scoreToWin = quizConfig.getScoreToWin();
         this.messageSource = messageSource;
     }
 
     @Override
     public void startQuiz() {
-        //Если начинаем квиз - то подготовим данные
-        quizData.prepareData();
         //попросим пользователя представиться
         String userNameString = userInteractionService.askUserForString(
                 messageSource.getMessage("strings.greetings", null, Locale.getDefault()));
@@ -42,8 +38,8 @@ public class QuizServiceImpl implements QuizService {
         userInteractionService.promptUser(messageSource.getMessage(
                 "strings.hello", new String[]{user.getUserName(), String.valueOf(scoreToWin)}, Locale.getDefault()));
         //В цикле зададим вопросы и соберем ответы
-        while (quizData.hasNext()) {
-            Question currentQuestion = quizData.getNextQuestion();
+        while (questionService.hasNext()) {
+            Question currentQuestion = questionService.getNextQuestion();
             System.out.print(currentQuestion);
             if (currentQuestion.needTextAnswer()) {
                 String userAnswerString = userInteractionService.askUserForString("Enter a text answer. Please.");
@@ -79,8 +75,8 @@ public class QuizServiceImpl implements QuizService {
     }
 
     public void printAllQuestions() {
-        while (quizData.hasNext()) {
-            System.out.print(quizData.getNextQuestion());
+        while (questionService.hasNext()) {
+            System.out.print(questionService.getNextQuestion());
             System.out.println("----------------------------------------");
         }
     }
