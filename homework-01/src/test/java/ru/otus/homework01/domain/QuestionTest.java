@@ -23,7 +23,7 @@ class QuestionTest {
         Question q = new Question("question text");
         q.setRightResponseIndex(1);
 
-        assertThat(q.checkResponse(1))
+        assertThat(q.checkResponseIndex(1))
                 .isTrue();
     }
 
