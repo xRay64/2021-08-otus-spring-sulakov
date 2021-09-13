@@ -2,11 +2,15 @@ package ru.otus.homework02.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import ru.otus.homework02.service.QuizMessageSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Класс Question")
 class QuestionTest {
+    @Autowired
+    private QuizMessageSource quizMessageSource;
 
     @DisplayName("должен сохранять и отдавать текст вопроса")
     @Test

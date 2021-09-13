@@ -1,5 +1,6 @@
-Кто из президентов США написал свой собственный рассказ про Шерлока Холмса?;Джон Кеннеди;*Франклин Рузвельт;Рональд Рейган
-Какую пошлину ввели в XII  веке в Англии для того чтобы заставить мужчин пойти на войну?;Налог на тунеядство;*Налог на трусость;Налог на отсутствие сапог
-Откуда пошло выражение "деньги не пахнут";От подателей за провоз парфюмерии;От сборов за нестиранные носки;*От налога на туалеты
-Туристы, приезжающие на Майорку, обязаны заплатить налог…;На плавки;На пальмы;*На солнце
-Мы часто произносим фразу «век живи — век учись», но никогда не договариваем ее до конца. Итак, «век живи  — век учись тому…»;жить
+Question;Answer1;Answer2;Answer3;Вопрос;Ответ1;Ответ2;Ответ3;Правильный ответ
+An american president who has wrote own sherlock holmes story;John F. Kennedy;Franklin Roosevelt;Ronald Reagan;Кто из президентов США написал свой собственный рассказ про Шерлока Холмса?;Джон Кеннеди;Франклин Рузвельт;Рональд Рейган;2
+What duty was introduced in the XII century in England in order to force men to go to war?;Tax on parasitism;The Cowardice Tax;Tax on the absence of boots;Какую пошлину ввели в XII  веке в Англии для того чтобы заставить мужчин пойти на войну?;Налог на тунеядство;Налог на трусость;Налог на отсутствие сапог;2
+"Where did the expression ""money does not smell"" come from";From the givers for the transport of perfumes;From fees for unwashed socks;From the toilet tax;"Откуда пошло выражение ""деньги не пахнут""";От подателей за провоз парфюмерии;От сборов за нестиранные носки;От налога на туалеты;3
+Tourists coming to Majorca are required to pay a tax for…;Swimming trunks;Palm trees;Sun;Туристы, приезжающие на Майорку, обязаны заплатить налог…;На плавки;На пальмы;На солнце;3
+"We often say the phrase ""live forever-learn forever"", but we never finish it to the end. So, "" live forever-learn forever...""";how to live;;;Мы часто произносим фразу «век живи — век учись», но никогда не договариваем ее до конца. Итак, «век живи  — век учись тому…»;жить;;;textAnswer

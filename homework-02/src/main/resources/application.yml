@@ -3,6 +3,7 @@ application:
     filename: questions.csv
   quiz:
     score-to-win: 3
+  language: RU
 spring:
   messages:
     basename: i18n/messages
