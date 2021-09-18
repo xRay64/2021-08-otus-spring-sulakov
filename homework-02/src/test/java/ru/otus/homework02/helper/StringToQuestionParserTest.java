@@ -2,12 +2,13 @@ package ru.otus.homework02.helper;
 
 import org.junit.jupiter.api.Test;
 import ru.otus.homework02.domain.Question;
+import ru.otus.homework02.exceptions.StringParserQuizRuntimeException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class StringToQuestionParserTest {
-    StringToQuestionParser stringToQuestionParser = new StringToQuestionParser();
+    StringToQuestionParser stringToQuestionParser = new StringToQuestionParserImpl();
 
     @Test
     void shouldCorrectConvertsToString() {
@@ -52,7 +53,7 @@ class StringToQuestionParserTest {
     @Test
     void shouldThrowExceptionOnEmptyString() {
         String stringToParse = "";
-        assertThatExceptionOfType(StringParserException.class)
+        assertThatExceptionOfType(StringParserQuizRuntimeException.class)
                 .isThrownBy(() -> stringToQuestionParser.parseStringToQuestion(stringToParse))
                 .withMessage("The inputString is empty");
     }
@@ -60,7 +61,7 @@ class StringToQuestionParserTest {
     @Test
     void shouldThrowExceptionOnErrorStringFormat() {
         String stringForParse = "Кто из президентов США написал свой собственный рассказ про Шерлока Холмса?;Джон Кеннеди;Франклин Рузвельт;Рональд Рейган;2";
-        assertThatExceptionOfType(StringParserException.class)
+        assertThatExceptionOfType(StringParserQuizRuntimeException.class)
                 .isThrownBy(() -> stringToQuestionParser.parseStringToQuestion(stringForParse))
                 .withMessage("Strings in CSV file dose not match correct format");
     }

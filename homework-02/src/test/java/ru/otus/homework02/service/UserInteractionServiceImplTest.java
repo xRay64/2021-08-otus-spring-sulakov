@@ -1,58 +1,71 @@
 package ru.otus.homework02.service;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.shell.jline.InteractiveShellApplicationRunner;
+import org.springframework.shell.jline.ScriptShellApplicationRunner;
+import ru.otus.homework02.helper.IOService;
+import ru.otus.homework02.helper.IOStreamsProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest(properties = {
+        InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
+        ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
+})
 @DisplayName("UserInteractionServiceImplTest Class")
 class UserInteractionServiceImplTest {
-    PrintStream originalOutStream = System.out;
-    InputStream originalInStream = System.in;
-    ByteArrayOutputStream mock = new ByteArrayOutputStream();
+    @MockBean
+    IOStreamsProvider ioStreamsProvider;
 
-    @BeforeEach
-    void setUp() {
-        System.setOut(new PrintStream(mock));
-    }
+    @Autowired
+    IOService ioService;
 
     @DisplayName("should prompt a user")
     @Test
     void shouldPromptUser() {
-        UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        Mockito.when(ioStreamsProvider.getPrintStream())
+                .thenReturn(new PrintStream(bos));
+        UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl(ioService);
         userInteractionService.promptUser("test string");
 
-        assertThat(mock.toString().trim()).isEqualTo("test string");
+        assertThat(bos.toString()).isEqualTo("test string\n");
     }
 
     @Test
     void askUserForSting() {
-        System.setIn(new ByteArrayInputStream("Ivan Ivanov".getBytes()));
-        UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ByteArrayInputStream bais = new ByteArrayInputStream("Ivan Ivanov".getBytes());
+        Mockito.when(ioStreamsProvider.getPrintStream())
+                .thenReturn(new PrintStream(bos));
+        Mockito.when(ioStreamsProvider.getInputStream())
+                .thenReturn(bais);
+        UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl(ioService);
         String userAnswer = userInteractionService.askUserForString("ask user");
-        assertThat(mock.toString().trim()).isEqualTo("ask user");
+        assertThat(bos.toString()).isEqualTo("ask user\n");
         assertThat(userAnswer).isEqualTo("Ivan Ivanov");
     }
 
     @Test
     void askUserForInt() {
-        System.setIn(new ByteArrayInputStream("2".getBytes()));
-        UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ByteArrayInputStream bais = new ByteArrayInputStream("2".getBytes());
+        Mockito.when(ioStreamsProvider.getPrintStream())
+                .thenReturn(new PrintStream(bos));
+        Mockito.when(ioStreamsProvider.getInputStream())
+                .thenReturn(bais);
+        UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl(ioService);
         int userAnswer = userInteractionService.askUserForInt("ask user for integer");
-        assertThat(mock.toString().trim()).isEqualTo("ask user for integer");
+        assertThat(bos.toString()).isEqualTo("ask user for integer\n");
         assertThat(userAnswer).isEqualTo(2);
-    }
-
-    @AfterEach
-    void tearDown() {
-        System.setOut(originalOutStream);
-        System.setIn(originalInStream);
     }
 }
