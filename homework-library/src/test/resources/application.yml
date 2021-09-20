@@ -3,6 +3,7 @@ spring:
     url: jdbc:h2:mem:library
     driver-class-name: org.h2.Driver
   liquibase:
+    change-log: classpath:db/changelog-test/db.changelog-master.yaml
     enabled: true
 
   sql:
