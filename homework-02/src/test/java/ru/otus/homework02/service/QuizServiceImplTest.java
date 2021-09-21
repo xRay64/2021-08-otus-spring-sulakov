@@ -5,13 +5,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import ru.otus.homework02.config.QuizConfig;
 import ru.otus.homework02.domain.Question;
 import ru.otus.homework02.helper.IOService;
-import ru.otus.homework02.helper.IOStreamsProvider;
+import ru.otus.homework02.helper.IOServiceImpl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -25,17 +27,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 })
 class QuizServiceImplTest {
 
-    @MockBean
-    IOStreamsProvider ioStreamsProvider;
+    private static ByteArrayOutputStream bos =new ByteArrayOutputStream();
+
+    @TestConfiguration
+    static class NestedTestConfiguration{
+        @Bean
+        public IOService ioService() {
+            return new IOServiceImpl(new PrintStream(bos), System.in);
+        }
+    }
 
     @MockBean
     QuizConfig quizConfig;
 
     @MockBean
     QuestionService questionService;
-
-    @Autowired
-    IOService ioService;
 
     @Autowired
     QuizService quizService;
@@ -62,10 +68,6 @@ class QuizServiceImplTest {
         question.addResponse("3. Three");
         Mockito.when(questionService.getNextQuestion())
                 .thenReturn(question);
-
-        ByteArrayOutputStream bos =new ByteArrayOutputStream();
-        Mockito.when(ioStreamsProvider.getPrintStream())
-                        .thenReturn(new PrintStream(bos));
 
         quizService.printAllQuestions();
 

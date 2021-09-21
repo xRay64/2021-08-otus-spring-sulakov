@@ -2,6 +2,8 @@ package ru.otus.homework02.helper;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,8 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 })
 @DisplayName("QuestionPrinterImplTest должен")
 class QuestionPrinterImplTest {
-    @MockBean
-    IOStreamsProvider ioStreamsProvider;
 
     @MockBean
     QuizConfig quizConfig;
@@ -63,12 +63,7 @@ class QuestionPrinterImplTest {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ByteArrayInputStream bais = new ByteArrayInputStream("".getBytes());
 
-        Mockito.when(ioStreamsProvider.getPrintStream())
-                .thenReturn(new PrintStream(bos));
-        Mockito.when(ioStreamsProvider.getInputStream())
-                .thenReturn(bais);
-
-        IOServiceImpl ioService = new IOServiceImpl(ioStreamsProvider);
+        IOServiceImpl ioService = new IOServiceImpl(new PrintStream(bos), bais);
 
         QuestionPrinter questionPrinter = new QuestionPrinterImpl(quizConfig, quizMessageSource, ioService);
         questionPrinter.printQuestion(question);
@@ -113,12 +108,7 @@ class QuestionPrinterImplTest {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ByteArrayInputStream bais = new ByteArrayInputStream("".getBytes());
 
-        Mockito.when(ioStreamsProvider.getPrintStream())
-                .thenReturn(new PrintStream(bos));
-        Mockito.when(ioStreamsProvider.getInputStream())
-                .thenReturn(bais);
-
-        IOServiceImpl ioService = new IOServiceImpl(ioStreamsProvider);
+        IOServiceImpl ioService = new IOServiceImpl(new PrintStream(bos), bais);
 
         QuestionPrinter questionPrinter = new QuestionPrinterImpl(quizConfig, quizMessageSource, ioService);
         questionPrinter.printQuestion(question);

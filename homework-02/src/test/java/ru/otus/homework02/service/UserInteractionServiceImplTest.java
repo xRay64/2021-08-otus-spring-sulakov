@@ -1,15 +1,12 @@
 package ru.otus.homework02.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.shell.jline.InteractiveShellApplicationRunner;
-import org.springframework.shell.jline.ScriptShellApplicationRunner;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.otus.homework02.helper.IOService;
-import ru.otus.homework02.helper.IOStreamsProvider;
+import ru.otus.homework02.helper.IOServiceImpl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,24 +14,21 @@ import java.io.PrintStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(properties = {
-        InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
-        ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
-})
-@DisplayName("UserInteractionServiceImplTest Class")
-class UserInteractionServiceImplTest {
-    @MockBean
-    IOStreamsProvider ioStreamsProvider;
 
-    @Autowired
-    IOService ioService;
+@DisplayName("UserInteractionServiceImplTest Class")
+@Execution(ExecutionMode.CONCURRENT)
+class UserInteractionServiceImplTest {
+
+    @BeforeEach
+    void setUp() {
+        System.out.println(Thread.currentThread().getName());
+    }
 
     @DisplayName("should prompt a user")
     @Test
     void shouldPromptUser() {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        Mockito.when(ioStreamsProvider.getPrintStream())
-                .thenReturn(new PrintStream(bos));
+        IOService ioService = new IOServiceImpl(new PrintStream(bos), System.in);
         UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl(ioService);
         userInteractionService.promptUser("test string");
 
@@ -45,10 +39,7 @@ class UserInteractionServiceImplTest {
     void askUserForSting() {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ByteArrayInputStream bais = new ByteArrayInputStream("Ivan Ivanov".getBytes());
-        Mockito.when(ioStreamsProvider.getPrintStream())
-                .thenReturn(new PrintStream(bos));
-        Mockito.when(ioStreamsProvider.getInputStream())
-                .thenReturn(bais);
+        IOService ioService = new IOServiceImpl(new PrintStream(bos), bais);
         UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl(ioService);
         String userAnswer = userInteractionService.askUserForString("ask user");
         assertThat(bos.toString()).isEqualTo("ask user\n");
@@ -59,10 +50,7 @@ class UserInteractionServiceImplTest {
     void askUserForInt() {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ByteArrayInputStream bais = new ByteArrayInputStream("2".getBytes());
-        Mockito.when(ioStreamsProvider.getPrintStream())
-                .thenReturn(new PrintStream(bos));
-        Mockito.when(ioStreamsProvider.getInputStream())
-                .thenReturn(bais);
+        IOService ioService = new IOServiceImpl(new PrintStream(bos), bais);
         UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl(ioService);
         int userAnswer = userInteractionService.askUserForInt("ask user for integer");
         assertThat(bos.toString()).isEqualTo("ask user for integer\n");

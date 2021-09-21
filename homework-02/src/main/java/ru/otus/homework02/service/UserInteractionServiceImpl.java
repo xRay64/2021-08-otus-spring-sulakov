@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 @Service
 public class UserInteractionServiceImpl implements UserInteractionService {
     private final IOService ioService;
-    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public UserInteractionServiceImpl(IOService ioService) {
         this.ioService = ioService;
