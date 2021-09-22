@@ -4,15 +4,17 @@ import org.springframework.stereotype.Service;
 import ru.otus.homework02.config.QuizConfig;
 import ru.otus.homework02.domain.Question;
 import ru.otus.homework02.domain.User;
+import ru.otus.homework02.helper.IOService;
 import ru.otus.homework02.helper.QuestionPrinter;
 
 @Service
 public class QuizServiceImpl implements QuizService {
     private final QuestionService questionService;
     private final UserInteractionService userInteractionService;
-    private final int scoreToWin;
+    private final QuizConfig quizConfig;
     private final QuizMessageSource quizMessageSource;
     private final QuestionPrinter questionPrinter;
+    private final IOService ioService;
     private User user;
     private int countOfAskedQuestions;
 
@@ -20,25 +22,34 @@ public class QuizServiceImpl implements QuizService {
                            UserInteractionService userInteractionService,
                            QuizConfig quizConfig,
                            QuizMessageSource quizMessageSource,
-                           QuestionPrinter questionPrinter) {
+                           QuestionPrinter questionPrinter,
+                           IOService ioService) {
         this.questionService = questionService;
         this.userInteractionService = userInteractionService;
-        this.scoreToWin = quizConfig.getQuiz().getScoreToWin();
+        this.quizConfig = quizConfig;
         this.quizMessageSource = quizMessageSource;
         this.questionPrinter = questionPrinter;
+        this.ioService = ioService;
     }
 
     @Override
-    public void startQuiz() {
+    public void registerUser() {
         //попросим пользователя представиться
         String userNameString = userInteractionService.askUserForString(
                 quizMessageSource.getMessage("strings.greetings"));
         if (userNameString != null) {
             this.user = new User(userNameString);
         }
+    }
+
+    @Override
+    public void startQuiz() {
+        if (this.user == null) {
+            registerUser();
+        }
         //начинаем игру
         userInteractionService.promptUser(quizMessageSource.getMessage(
-                "strings.hello", user.getUserName(), String.valueOf(scoreToWin)));
+                "strings.hello", user.getUserName(), String.valueOf(quizConfig.getQuiz().getScoreToWin())));
         //В цикле зададим вопросы и соберем ответы
         while (questionService.hasNext()) {
             Question currentQuestion = questionService.getNextQuestion();
@@ -69,7 +80,7 @@ public class QuizServiceImpl implements QuizService {
 
         int resultPercent = 100 / countOfAskedQuestions * user.getScore();
 
-        if (user.getScore() >= scoreToWin) {
+        if (user.getScore() >= quizConfig.getQuiz().getScoreToWin()) {
             System.out.print(quizMessageSource.getMessage("strings.win", String.valueOf(resultPercent)));
         } else {
             System.out.print(quizMessageSource.getMessage("strings.loose", String.valueOf(resultPercent)));
@@ -78,8 +89,8 @@ public class QuizServiceImpl implements QuizService {
 
     public void printAllQuestions() {
         while (questionService.hasNext()) {
-            System.out.print(questionService.getNextQuestion());
-            System.out.println("----------------------------------------");
+            ioService.print(String.valueOf(questionService.getNextQuestion()));
+            ioService.println("----------------------------------------");
         }
     }
 }

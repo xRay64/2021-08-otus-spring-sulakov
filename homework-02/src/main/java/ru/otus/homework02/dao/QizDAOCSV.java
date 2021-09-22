@@ -2,6 +2,7 @@ package ru.otus.homework02.dao;
 
 import org.springframework.stereotype.Component;
 import ru.otus.homework02.config.QuizConfig;
+import ru.otus.homework02.exceptions.DAOQuizRuntimeException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,21 +14,36 @@ import java.util.List;
 @Component
 public class QizDAOCSV implements QuizDAO {
 
-    private final String fileName;
+    private final QuizConfig quizConfig;
     private List<String> strings;
 
     public QizDAOCSV(QuizConfig quizConfig) {
-        this.fileName = quizConfig.getCsv().getFileName();
+        this.quizConfig = quizConfig;
+    }
+
+    @Override
+    public int getStringsCount() {
+        lazyLoad();
+        return strings.size();
+    }
+
+    @Override
+    public String getString(int index) {
+        lazyLoad();
+        if (index > strings.size() - 1 || index < 0) {
+            throw new DAOQuizRuntimeException("Index out of bound");
+        }
+        return strings.get(index);
     }
 
     private void readFile() {
         boolean isFirstRowSkipped = false;
-        if (fileName == null) {
-            throw new QuizDAOException("Filename is NULL");
+        if (quizConfig.getCsv().getFileName() == null) {
+            throw new DAOQuizRuntimeException("Filename is NULL");
         } else {
-            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(fileName);
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(quizConfig.getCsv().getFileName());
             if (resourceAsStream == null) {
-                throw new QuizDAOException("Error while getting stream from resource");
+                throw new DAOQuizRuntimeException("Error while getting stream from resource");
             }
             //Читаем файл в список и закрываем поток
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream))) {
@@ -44,21 +60,6 @@ public class QizDAOCSV implements QuizDAO {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public int getStringsCount() {
-        lazyLoad();
-        return strings.size();
-    }
-
-    @Override
-    public String getString(int index) {
-        lazyLoad();
-        if (index > strings.size() - 1 || index < 0) {
-            throw new QuizDAOException("Index out of bound");
-        }
-        return strings.get(index);
     }
 
     //читаем файл в том случае, если еще не делали этого

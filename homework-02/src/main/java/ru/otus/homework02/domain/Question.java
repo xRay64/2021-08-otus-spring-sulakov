@@ -1,5 +1,7 @@
 package ru.otus.homework02.domain;
 
+import ru.otus.homework02.exceptions.QuestionQuizRuntimeException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ public class Question {
         if (response != null & !"".equals(response)) {
             responses.put(responses.size() + 1, response);
         } else {
-            throw new QuestionExcepton("Response can't be null");
+            throw new QuestionQuizRuntimeException("Response can't be null");
         }
     }
 
@@ -41,7 +43,7 @@ public class Question {
         if (translatedResponse != null & !"".equals(translatedResponse)) {
             responsesTranslated.put(responsesTranslated.size() + 1, translatedResponse);
         } else {
-            throw new QuestionExcepton("Response can't be null");
+            throw new QuestionQuizRuntimeException("Response can't be null");
         }
     }
 
