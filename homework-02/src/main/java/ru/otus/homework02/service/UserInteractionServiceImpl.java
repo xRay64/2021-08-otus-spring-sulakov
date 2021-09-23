@@ -1,45 +1,40 @@
 package ru.otus.homework02.service;
 
 import org.springframework.stereotype.Service;
+import ru.otus.homework02.helper.IOService;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Service
-public class UserInteractionServiceImpl implements UserInteractionService{
-    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+public class UserInteractionServiceImpl implements UserInteractionService {
+    private final IOService ioService;
+
+    public UserInteractionServiceImpl(IOService ioService) {
+        this.ioService = ioService;
+    }
 
     @Override
     public void promptUser(String message) {
-        System.out.println(message);
+        ioService.println(message);
     }
 
     @Override
     public String askUserForString(String message) {
-        String answer = null;
-        System.out.println(message);
-        try {
-            answer = reader.readLine();
-        } catch (IOException e) {
-            System.out.println("Error while reading user answer");
-            e.printStackTrace();
-        }
+        ioService.println(message);
+        String answer = ioService.readLine();
         return answer;
     }
 
     @Override
     public int askUserForInt(String message) {
         int answerInt = -1;
-        System.out.println(message);
+        ioService.println(message);
         try {
-            answerInt = Integer.parseInt(reader.readLine());
+            answerInt = Integer.parseInt(ioService.readLine());
         } catch (NumberFormatException e) {
-            System.out.println("Wrong number. Please enter a correct number of answer.");
+            ioService.println("Wrong number. Please enter a correct number of answer.");
             this.askUserForInt(message);
-        } catch (IOException e) {
-            System.out.println("Error while reading answer number.");
-            e.printStackTrace();
         }
         return answerInt;
     }
