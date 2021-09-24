@@ -20,7 +20,7 @@ class AuthorDAODBTest {
 
     @Test
     @DisplayName("должен возвращать ожидаемое количество авторов из БД")
-    void shouldReturnExpectiedAuthorCcount() {
+    void shouldReturnExpectedAuthorCount() {
         Assertions.assertThat(authorDAO.count())
                 .isEqualTo(5);
     }
@@ -47,7 +47,7 @@ class AuthorDAODBTest {
                         new Author(3L, "Author3"),
                         new Author(4L, "Author4"),
                         new Author(5L, "Author5")
-                        );
+                );
     }
 
     @Test
@@ -86,5 +86,12 @@ class AuthorDAODBTest {
         authorDAO.deleteById(1L);
         Assertions.assertThatThrownBy(() -> authorDAO.getById(1L))
                 .isInstanceOf(EmptyResultDataAccessException.class);
+    }
+
+    @Test
+    @DisplayName("должен возвращать корректный максимальный id")
+    void shouldReturnCorrectMaxID() {
+        Assertions.assertThat(authorDAO.getMaxId())
+                .isEqualTo(5);
     }
 }

@@ -86,4 +86,11 @@ class GenreDAODBTest {
         Assertions.assertThatThrownBy(() -> genreDAO.getById(1L))
                 .isInstanceOf(EmptyResultDataAccessException.class);
     }
+
+    @Test
+    @DisplayName("должен возвращать корректный максимальный id")
+    void shouldReturnCorrectMaxID() {
+        Assertions.assertThat(genreDAO.getMaxId())
+                .isEqualTo(3);
+    }
 }

@@ -14,21 +14,7 @@ import java.sql.SQLException;
 public class HomeworkLibraryApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(HomeworkLibraryApplication.class, args);
-
-        try {
-            Console.main(args);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        AuthorDAO bean = context.getBean(AuthorDAO.class);
-        System.out.println(bean.count()); //todo все тут почистить
-
-//        System.out.println(bean.getById(5));
-        for (Author author : bean.getAll()) {
-            System.out.println(author);
-        }
-
+        SpringApplication.run(HomeworkLibraryApplication.class, args);
     }
 
 }

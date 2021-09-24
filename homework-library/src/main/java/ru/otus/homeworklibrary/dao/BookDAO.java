@@ -11,11 +11,13 @@ public interface BookDAO {
 
     List<Book> getAll();
 
-    void add(Book author);
+    long add(Book book);
 
-    void update(Book author);
+    void update(Book book);
 
-    void delete(Book author);
+    void delete(Book book);
 
     void deleteById(long id);
+
+    long getMaxId();
 }

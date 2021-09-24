@@ -29,12 +29,13 @@ public class GenreDAODB implements GenreDAO{
     public Genre getById(long id) {
         return jdbcTemplate.queryForObject("select id, name from genres_tbl where id = :id",
                 Map.of("id", id),
-                new GenreMapper());
+                (rs, rowNum) -> new Genre(rs.getLong("id"), rs.getString("name")));
     }
 
     @Override
     public List<Genre> getAll() {
-        return jdbcTemplate.query("select id, name from genres_tbl", new GenreMapper());
+        return jdbcTemplate.query("select id, name from genres_tbl",
+                (rs, rowNum) -> new Genre(rs.getLong("id"), rs.getString("name")));
     }
 
     @Override
@@ -54,7 +55,7 @@ public class GenreDAODB implements GenreDAO{
 
     @Override
     public void delete(Genre genre) {
-        jdbcTemplate.update("delete from genres_tbl where id = :id", Map.of("id", genre.getId()));
+        deleteById(genre.getId());
     }
 
     @Override
@@ -62,7 +63,12 @@ public class GenreDAODB implements GenreDAO{
         jdbcTemplate.update("delete from genres_tbl where id = :id", Map.of("id", id));
     }
 
-    private static class GenreMapper implements RowMapper<Genre> {
+    @Override
+    public long getMaxId() {
+        return jdbcTemplate.queryForObject("select max(id) from genres_tbl", Map.of(), Long.class);
+    }
+
+    /*private static class GenreMapper implements RowMapper<Genre> {
 
         @Override
         public Genre mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -70,5 +76,5 @@ public class GenreDAODB implements GenreDAO{
             String name = rs.getString("name");
             return new Genre(id, name);
         }
-    }
+    }*/
 }

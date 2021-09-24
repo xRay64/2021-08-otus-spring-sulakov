@@ -2,7 +2,7 @@ package ru.otus.homeworklibrary.domain;
 
 public class Author {
     private final long id;
-    private final String name;
+    private String name;
 
     public Author(long id, String name) {
         this.id = id;
@@ -15,6 +15,10 @@ public class Author {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

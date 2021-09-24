@@ -18,4 +18,6 @@ public interface AuthorDAO {
     void delete(Author author);
 
     void deleteById(long id);
+
+    long getMaxId();
 }

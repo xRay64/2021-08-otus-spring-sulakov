@@ -18,4 +18,6 @@ public interface GenreDAO {
     void delete(Genre author);
 
     void deleteById(long id);
+
+    long getMaxId();
 }

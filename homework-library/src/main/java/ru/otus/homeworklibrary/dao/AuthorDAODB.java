@@ -54,12 +54,17 @@ public class AuthorDAODB implements AuthorDAO {
 
     @Override
     public void delete(Author author) {
-        jdbcTemplate.update("delete from authors_tbl where id = :id", Map.of("id", author.getId()));
+        deleteById(author.getId());
     }
 
     @Override
     public void deleteById(long id) {
         jdbcTemplate.update("delete from authors_tbl where id = :id", Map.of("id", id));
+    }
+
+    @Override
+    public long getMaxId() {
+        return jdbcTemplate.queryForObject("select max(id) from authors_tbl", Map.of(), Long.class);
     }
 
     private static class AuthorMapper implements RowMapper<Author> {

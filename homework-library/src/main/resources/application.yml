@@ -15,3 +15,7 @@ spring:
       settings:
         web-allow-others: true
       enabled: true
+
+  logging:
+    level:
+      ROOT: error
