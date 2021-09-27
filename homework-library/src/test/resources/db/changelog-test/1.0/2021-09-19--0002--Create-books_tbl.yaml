@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2021-09-19--0002--Create-books_tbl
+      author: Anton Sulakov
+      createTable:
+        tableName: books_tbl
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_books
+          - column:
+              name: name
+              type: varchar(255)
+          - column:
+              name: author_id
+              type: bigint
+              constraints:
+                nullable: false
+                foreighnKey:
+                  uniqueConstraint: true
+                  foreignKeyName: fk_books_auther
+                  baseTableName: authors_tbl
+                  baseColumnName: id
