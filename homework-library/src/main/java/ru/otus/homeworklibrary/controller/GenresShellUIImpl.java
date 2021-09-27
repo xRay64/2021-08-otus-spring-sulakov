@@ -1,5 +1,6 @@
 package ru.otus.homeworklibrary.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -7,13 +8,10 @@ import ru.otus.homeworklibrary.domain.Genre;
 import ru.otus.homeworklibrary.service.GenresService;
 
 @ShellComponent()
+@AllArgsConstructor
 public class GenresShellUIImpl implements GenresShellUI{
 
     private final GenresService genresService;
-
-    public GenresShellUIImpl(GenresService genresService) {
-        this.genresService = genresService;
-    }
 
     @Override
     @ShellMethod("Print genre by id")

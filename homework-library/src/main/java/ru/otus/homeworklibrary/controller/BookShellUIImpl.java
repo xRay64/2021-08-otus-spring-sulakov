@@ -1,5 +1,6 @@
 package ru.otus.homeworklibrary.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -7,13 +8,10 @@ import ru.otus.homeworklibrary.domain.Book;
 import ru.otus.homeworklibrary.service.BookService;
 
 @ShellComponent
+@AllArgsConstructor
 public class BookShellUIImpl implements BookShellUI{
 
     private final BookService bookService;
-
-    public BookShellUIImpl(BookService bookService) {
-        this.bookService = bookService;
-    }
 
     @Override
     @ShellMethod("print book by id")

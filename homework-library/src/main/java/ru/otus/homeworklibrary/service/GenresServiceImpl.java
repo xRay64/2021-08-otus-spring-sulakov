@@ -1,5 +1,6 @@
 package ru.otus.homeworklibrary.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.homeworklibrary.dao.GenreDAO;
 import ru.otus.homeworklibrary.domain.Genre;
@@ -7,13 +8,10 @@ import ru.otus.homeworklibrary.domain.Genre;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class GenresServiceImpl implements GenresService{
 
     private final GenreDAO genreDAO;
-
-    public GenresServiceImpl(GenreDAO genreDAO) {
-        this.genreDAO = genreDAO;
-    }
 
     @Override
     public List<Genre> getAllGenres() {

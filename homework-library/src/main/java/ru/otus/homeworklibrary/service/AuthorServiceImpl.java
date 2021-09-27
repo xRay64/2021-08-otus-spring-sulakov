@@ -1,5 +1,6 @@
 package ru.otus.homeworklibrary.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.homeworklibrary.dao.AuthorDAO;
 import ru.otus.homeworklibrary.domain.Author;
@@ -7,12 +8,9 @@ import ru.otus.homeworklibrary.domain.Author;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorDAO authorDAO;
-
-    public AuthorServiceImpl(AuthorDAO authorDAO) {
-        this.authorDAO = authorDAO;
-    }
 
     @Override
     public List<Author> getAllAuthors() {

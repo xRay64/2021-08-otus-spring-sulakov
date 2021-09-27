@@ -1,5 +1,6 @@
 package ru.otus.homeworklibrary.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.homeworklibrary.dao.AuthorDAO;
 import ru.otus.homeworklibrary.dao.BookDAO;
@@ -12,19 +13,13 @@ import ru.otus.homeworklibrary.service.ext.BookParamsProvider;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class BookServiceImpl implements BookService {
 
     private final BookDAO bookDAO;
     private final AuthorDAO authorDAO;
     private final GenreDAO genreDAO;
     private final BookParamsProvider bookParamsProvider;
-
-    public BookServiceImpl(BookDAO bookDAO, AuthorDAO authorDAO, GenreDAO genreDAO, BookParamsProvider bookParamsProvider) {
-        this.bookDAO = bookDAO;
-        this.authorDAO = authorDAO;
-        this.genreDAO = genreDAO;
-        this.bookParamsProvider = bookParamsProvider;
-    }
 
     @Override
     public List<Book> getAll() {

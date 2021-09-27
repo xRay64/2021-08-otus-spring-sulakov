@@ -1,5 +1,6 @@
 package ru.otus.homeworklibrary.dao;
 
+import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,12 +17,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
+@AllArgsConstructor
 public class BookDAODB implements BookDAO {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-
-    public BookDAODB(NamedParameterJdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public long count() {

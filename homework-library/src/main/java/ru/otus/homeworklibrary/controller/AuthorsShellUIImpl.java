@@ -1,5 +1,7 @@
 package ru.otus.homeworklibrary.controller;
 
+import liquibase.pro.packaged.A;
+import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -9,13 +11,10 @@ import ru.otus.homeworklibrary.service.AuthorService;
 import java.util.List;
 
 @ShellComponent
+@AllArgsConstructor
 public class AuthorsShellUIImpl implements AuthorsShellUI {
 
     private final AuthorService authorService;
-
-    public AuthorsShellUIImpl(AuthorService authorService) {
-        this.authorService = authorService;
-    }
 
     @Override
     @ShellMethod(key = "print-author", value = "Printing all authors")
