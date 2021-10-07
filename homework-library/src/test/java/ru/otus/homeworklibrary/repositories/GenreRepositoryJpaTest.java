@@ -8,8 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.homeworklibrary.models.Genre;
-import ru.otus.homeworklibrary.repositories.GenreRepository;
-import ru.otus.homeworklibrary.repositories.GenreRepositoryJpa;
 
 import java.util.List;
 
@@ -23,8 +21,6 @@ class GenreRepositoryJpaTest {
     private static final long SECOND_GENRE_ID = 2L;
     private static final long THIRD_GENRE_ID = 3L;
     private static final long FOURTH_GENRE_ID = 4L;
-
-    private static final long EXPECTED_MAX_ID = 3;
 
     @Autowired
     TestEntityManager em;
@@ -81,7 +77,6 @@ class GenreRepositoryJpaTest {
     void shouldUpdateGenre() {
         repository.updateNameById(THIRD_GENRE_ID, "GenreUpdated");
         em.flush();
-        em.clear();
         Genre updatedGenre = em.find(Genre.class, THIRD_GENRE_ID);
         Assertions.assertThat(updatedGenre)
                 .usingRecursiveComparison()
@@ -92,15 +87,8 @@ class GenreRepositoryJpaTest {
     @DisplayName("должен удалять жанр из БД по его ID")
     void shouldDeleteGenreById() {
         repository.deleteById(SECOND_GENRE_ID);
-        em.clear();
+        em.flush();
         Assertions.assertThat(em.find(Genre.class, SECOND_GENRE_ID))
                         .isNull();
-    }
-
-    @Test
-    @DisplayName("должен возвращать корректный максимальный id")
-    void shouldReturnCorrectMaxID() {
-        Assertions.assertThat(repository.getMaxId())
-                .isEqualTo(EXPECTED_MAX_ID);
     }
 }

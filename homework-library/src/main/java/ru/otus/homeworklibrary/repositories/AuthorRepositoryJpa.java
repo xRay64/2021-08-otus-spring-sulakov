@@ -1,17 +1,16 @@
 package ru.otus.homeworklibrary.repositories;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.homeworklibrary.models.Author;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 @AllArgsConstructor
 public class AuthorRepositoryJpa implements AuthorRepository {
     @PersistenceContext
@@ -52,23 +51,15 @@ public class AuthorRepositoryJpa implements AuthorRepository {
 
     @Override
     public void updateNameById(long id, String name) {
-        Query query = em.createQuery("update Author a set a.name = :name where a.id = :id");
-        query.setParameter("id", id);
-        query.setParameter("name", name);
-        query.executeUpdate();
+        Author author = em.find(Author.class, id);
+        author.setName(name);
+        em.merge(author);
     }
 
     @Override
-    public void delteById(long id) {
-        Query query = em.createQuery("delete from Author a where a.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
-    }
-
-    @Override
-    public long getMaxId() {
-        TypedQuery<Long> query = em.createQuery("select max(id) from Author", Long.class);
-        return query.getSingleResult();
+    public void deleteById(long id) {
+        Author author = em.find(Author.class, id);
+        em.remove(author);
     }
 
 }

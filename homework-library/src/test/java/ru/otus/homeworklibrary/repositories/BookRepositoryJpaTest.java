@@ -11,6 +11,7 @@ import ru.otus.homeworklibrary.models.Author;
 import ru.otus.homeworklibrary.models.Book;
 import ru.otus.homeworklibrary.models.Genre;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,13 +83,11 @@ class BookRepositoryJpaTest {
     @DisplayName("добавлять книгу в базу")
     @Test
     void shouldAddBook() {
-        Book expectedBook = em.find(Book.class, 1L);
-        Assertions.assertThat(expectedBook).isNotNull();
-        expectedBook.setId(4L);
-
-        em.clear();
-
+        Book donorBook = em.find(Book.class, FIRST_BOOK_ID);
+        Assertions.assertThat(donorBook).isNotNull();
+        Book expectedBook = new Book(FOURTH_BOOK_ID, "NewBook4", donorBook.getAuthor(), donorBook.getGenreList());
         repository.save(expectedBook);
+        em.flush();
 
         Book insertedBook = em.find(Book.class, FOURTH_BOOK_ID);
 
@@ -98,20 +97,22 @@ class BookRepositoryJpaTest {
         Assertions.assertThat(insertedBook)
                 .usingRecursiveComparison()
                 .isEqualTo(expectedBook);
-
     }
 
     @DisplayName("обновлять книгу в базе")
     @Test
     void shouldUpdateBook() {
         Book expectedBook = em.find(Book.class, THIRD_BOOK_ID);
-        em.detach(expectedBook);
         expectedBook.setName("Book3Updated");
-        expectedBook.setAuthor(List.of(new Author(6L, "Author10Inserted")));
-        expectedBook.setGenreList(List.of(new Genre(1L, "Genre1")));
+        List<Author> authorList = new ArrayList<>();
+        authorList.add(new Author(6L, "Author10Inserted"));
+        expectedBook.setAuthor(authorList);
+        List<Genre> genreList = new ArrayList<>();
+        genreList.add(new Genre(1L, "Genre1"));
+        expectedBook.setGenreList(genreList);
         repository.update(expectedBook);
         em.flush();
-        em.clear();
+        em.detach(expectedBook);
         Book updatedBook = em.find(Book.class, THIRD_BOOK_ID);
 
         System.out.println(expectedBook);
@@ -126,6 +127,7 @@ class BookRepositoryJpaTest {
     @Test
     void shouldDeleteById() {
         repository.deleteById(FIRST_BOOK_ID);
+        em.flush();
         Assertions.assertThat(em.find(Book.class, FIRST_BOOK_ID))
                 .isNull();
     }

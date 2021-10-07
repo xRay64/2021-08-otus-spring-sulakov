@@ -1,17 +1,16 @@
 package ru.otus.homeworklibrary.repositories;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.homeworklibrary.models.Genre;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 @AllArgsConstructor
 public class GenreRepositoryJpa implements GenreRepository {
     @PersistenceContext
@@ -52,22 +51,14 @@ public class GenreRepositoryJpa implements GenreRepository {
 
     @Override
     public void updateNameById(long id, String name) {
-        Query query = em.createQuery("update Genre set name = :name where id = :id");
-        query.setParameter("id", id);
-        query.setParameter("name", name);
-        query.executeUpdate();
+        Genre genre = em.find(Genre.class, id);
+        genre.setName(name);
+        em.merge(genre);
     }
 
     @Override
     public void deleteById(long id) {
-        Query query = em.createQuery("delete from Genre where id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
-    }
-
-    @Override
-    public long getMaxId() {
-        TypedQuery<Long> query = em.createQuery("select max(id) from Genre", Long.class);
-        return query.getSingleResult();
+        Genre genre = em.find(Genre.class, id);
+        em.remove(genre);
     }
 }

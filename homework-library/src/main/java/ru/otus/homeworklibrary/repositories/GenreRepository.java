@@ -19,6 +19,4 @@ public interface GenreRepository {
     void updateNameById(long id, String name);
 
     void deleteById(long id);
-
-    long getMaxId();
 }

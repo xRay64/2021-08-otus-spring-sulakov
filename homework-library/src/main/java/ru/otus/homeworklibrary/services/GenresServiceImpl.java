@@ -15,13 +15,11 @@ public class GenresServiceImpl implements GenresService{
     private final GenreRepository genreRepository;
 
     @Override
-    @Transactional
     public List<Genre> getAllGenres() {
         return genreRepository.findAll();
     }
 
     @Override
-    @Transactional
     public Genre getGenre(long id) {
         return genreRepository.findById(id).orElseThrow(() -> new RuntimeException("Genre id isn't exists"));
     }

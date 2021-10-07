@@ -24,13 +24,11 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
-    @Transactional
     public List<Book> getAll() {
         return bookRepository.findAll();
     }
 
     @Override
-    @Transactional
     public Book get(long id) {
         return bookRepository.find(id).orElseThrow(() -> new RuntimeException("Book id isn't exists"));
     }

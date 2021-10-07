@@ -14,13 +14,11 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
 
     @Override
-    @Transactional
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
     }
 
     @Override
-    @Transactional
     public Author getAuthor(long id) {
         return authorRepository.find(id).orElseThrow(() -> new RuntimeException("Author id isn't exists"));
     }
@@ -41,6 +39,6 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public void deleteAuthor(long id) {
-        authorRepository.delteById(id);
+        authorRepository.deleteById(id);
     }
 }

@@ -1,17 +1,16 @@
 package ru.otus.homeworklibrary.repositories;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.homeworklibrary.models.Book;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 @AllArgsConstructor
 public class BookRepositoryJpa implements BookRepository {
     @PersistenceContext
@@ -58,17 +57,8 @@ public class BookRepositoryJpa implements BookRepository {
     }
 
     @Override
-    public void updateNameById(long id, String name) {
-        Query query = em.createQuery("update Book set name = :name where id = :id");
-        query.setParameter("name", name);
-        query.setParameter("id", id);
-        query.executeUpdate();
-    }
-
-    @Override
     public void deleteById(long id) {
-        Query query = em.createQuery("delete from Book where id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        Book book = em.find(Book.class, id);
+        em.remove(book);
     }
 }

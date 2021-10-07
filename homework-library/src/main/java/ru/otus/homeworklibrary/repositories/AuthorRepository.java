@@ -18,7 +18,5 @@ public interface AuthorRepository {
 
     void updateNameById(long id, String name);
 
-    void delteById(long id);
-
-    long getMaxId();
+    void deleteById(long id);
 }

@@ -8,8 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.homeworklibrary.models.Author;
-import ru.otus.homeworklibrary.repositories.AuthorRepository;
-import ru.otus.homeworklibrary.repositories.AuthorRepositoryJpa;
 
 import java.util.List;
 
@@ -25,8 +23,6 @@ class AuthorRepositoryJpaTest {
     private static final long FOURTH_AUTHOR_ID = 4L;
     private static final long FIFTH_AUTHOR_ID = 5L;
     private static final long SIX_AUTHOR_ID = 6L;
-
-    private static final long EXPECTED_MAX_ID = 5;
 
     @Autowired
     private AuthorRepository repository;
@@ -84,7 +80,7 @@ class AuthorRepositoryJpaTest {
     @DisplayName("должен обновлять автора в БД")
     void shouldUpdateAuthor() {
         repository.updateNameById(FIFTH_AUTHOR_ID, "AuthorUpdated");
-        em.clear();
+        em.flush();
         Author updatedAuthor = em.find(Author.class, FIFTH_AUTHOR_ID);
         Assertions.assertThat(updatedAuthor)
                 .usingRecursiveComparison()
@@ -96,16 +92,9 @@ class AuthorRepositoryJpaTest {
     void shouldDeleteAuthorById() {
         Author deletingAuthor = em.find(Author.class, SECOND_AUTHOR_ID);
         Assertions.assertThat(deletingAuthor).isNotNull();
-        repository.delteById(SECOND_AUTHOR_ID);
-        em.clear();
+        repository.deleteById(SECOND_AUTHOR_ID);
+        em.flush();
         Assertions.assertThat(repository.find(SECOND_AUTHOR_ID))
                 .isEmpty();
-    }
-
-    @Test
-    @DisplayName("должен возвращать корректный максимальный id")
-    void shouldReturnCorrectMaxID() {
-        Assertions.assertThat(repository.getMaxId())
-                .isEqualTo(EXPECTED_MAX_ID);
     }
 }

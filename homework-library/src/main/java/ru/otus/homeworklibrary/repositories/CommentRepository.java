@@ -12,11 +12,11 @@ public interface CommentRepository {
 
     Optional<BookComment> findById(long id);
 
-    List<BookComment> findByBookId(long id);
-
     List<BookComment> findAll();
 
     void updateById(long id, String text);
 
-    void deleteById(long id);
+    void update(BookComment comment);
+
+    void delete(long id);
 }

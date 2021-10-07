@@ -25,21 +25,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public List<BookComment> getAllComments() {
         return repository.findAll();
     }
 
     @Override
-    @Transactional
     public BookComment getComment(long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("error while getting Comment with id " + id));
     }
 
     @Override
-    @Transactional
     public List<BookComment> getByBookId(long bookId) {
-        return repository.findByBookId(bookId);
+        Book book = bookRepository.find(bookId).orElseThrow(() -> new RuntimeException("Error getting book in comment servise"));
+        return book.getBookComments();
     }
 
     @Override
@@ -51,6 +49,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void deleteCommentById(long id) {
-        repository.deleteById(id);
+        repository.delete(id);
     }
 }

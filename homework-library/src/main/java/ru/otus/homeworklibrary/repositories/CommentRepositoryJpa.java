@@ -1,17 +1,16 @@
 package ru.otus.homeworklibrary.repositories;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.homeworklibrary.models.BookComment;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 @AllArgsConstructor
 public class CommentRepositoryJpa implements CommentRepository {
     @PersistenceContext
@@ -38,13 +37,6 @@ public class CommentRepositoryJpa implements CommentRepository {
     }
 
     @Override
-    public List<BookComment> findByBookId(long id) {
-        TypedQuery<BookComment> query = em.createQuery("select c from BookComment c where c.book.id = :book_id", BookComment.class);
-        query.setParameter("book_id", id);
-        return query.getResultList();
-    }
-
-    @Override
     public List<BookComment> findAll() {
         TypedQuery<BookComment> query = em.createQuery("select c from BookComment c", BookComment.class);
         return query.getResultList();
@@ -52,16 +44,19 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     @Override
     public void updateById(long id, String text) {
-        Query query = em.createQuery("update BookComment set commentText = :comment_text where id = :id");
-        query.setParameter("id", id);
-        query.setParameter("comment_text", text);
-        query.executeUpdate();
+        BookComment comment = em.find(BookComment.class, id);
+        comment.setCommentText(text);
+        em.merge(comment);
     }
 
     @Override
-    public void deleteById(long id) {
-        Query query = em.createQuery("delete from BookComment where id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+    public void update(BookComment comment) {
+        em.merge(comment);
+    }
+
+    @Override
+    public void delete(long id) {
+        BookComment comment = em.find(BookComment.class, id);
+        em.remove(comment);
     }
 }
