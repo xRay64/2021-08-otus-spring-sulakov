@@ -1,0 +1,276 @@
+1632294914589:help
+1632294921546:exit
+1632295929003:help
+1632295953362:print-all-authors
+1632295960304:exit
+1632296200738:help
+1632296206552:print-author 123
+1632296226263:print-author 123 456
+1632296334940:print-author 123
+1632297233951:help
+1632297240328:print-author 123 456
+1632297248298:print-author 123
+1632297266069:print-author --author-id 123
+1632297278776:print-author --author-id 123 --author-id2 456
+1632297300363:print-author --author-id2 456 --author-id 123
+1632297309731:exit
+1632297726852:help
+1632297736150:print-all-authors
+1632297843932:add-author --author-name Сергей Лукьяненко
+1632297858794:add-author "Сергей Лукьяненко"
+1632297864806:print-all-authors
+1632297885007:delete-author 2
+1632297891467:print-all-authors
+1632317644651:help
+1632317981975:print-all-genres
+1632317990026:print-genre 1
+1632318008298:add-genre проза
+1632318015488:print-all-genres
+1632318024727:delete-genre 2
+1632318030861:print-all-genres
+1632432525233:help
+1632432666904:add-book boooooook
+1632432932534:help
+1632432950095:add-book "Моби дик"
+1632433046381:add-book booook
+1632433079391:add-book booooook
+1632502522359:help
+1632502535899:add-book bbbbbook
+1632503606370:add-book boook
+1632503880962:add-book booook1
+1632503970292:add-book boook1
+1632504012124:add-book book1
+1632504074413:add-book book
+1632504229930:add-book booook
+1632504335895:add-book boooooook2
+1632504880248:add-book
+1632504894478:add-book booook
+1632506571509:add-book boooooooooook123
+1632507339063:help
+1632507350834:print-all-books
+1632507697062:help
+1632507713094:print-book 6
+1632507720620:delete-book 1
+1632507729058:print-all-book
+1632507741336:print-all-books
+1632507777289:updatebook 2 "Преступление и наказание updated"
+1632507789975:help
+1632507819485:update-book 2 '\n\n\n\nexit\n'
+1632507855173:update-book 2 'преступление и наказание updated'
+1632507893203:update-book 2 updated_name
+1632507958118:update-book 2 'Преступление и наказание updated'
+1632507973582:print-all-books
+1632508004453:exit
+1632757973711:help
+1632757981890:print-all-books
+1632758260852:help
+1632758265372:print-all-genres
+1632758274445:print-all-books
+1632758288109:print-all-authors
+1632861781479:help
+1632861825683:print-all-authors
+1632861839863:print-author 1
+1632861846642:print-all-genres
+1632861887811:stacktrace
+1632861950123:print-all-genres
+1632861955636:print-genre 1
+1632861964725:print-genre 2
+1632861966972:print-genre 3
+1632861973984:help
+1632862002692:add-author "Виктор Пелевин"
+1632862010795:print-all-authors
+1632862043865:help
+1632862053703:delete-author 5
+1632862060245:print-all-authors
+1632862066175:print-all-books
+1632862073018:stacktrace
+1632862114270:print-all-books
+1632862122848:stacktrace
+1632862199667:print-all-books
+1632862203945:stacktrace
+1632862706983:print-all-books
+1632862712880:stacktrace
+1632862774485:print-all-books
+1632862811549:stacktrace
+1632862833747:print-all-books
+1632862848815:delete-book 2
+1632862853325:stacktrace
+1632863299150:help
+1632863303929:delete-book 2
+1632863330407:delete-book 1
+1632863357514:print-all-books
+1632863364863:delte-book 3
+1632863373454:delete-book 3
+1632863403363:delete-book 4
+1632863411767:print-all-authors
+1632863493980:delete-author 1
+1632863498380:delte-genre 1
+1632863503843:stacktrace
+1632863516647:delete-genre 1
+1632919574004:print-all-books
+1632920497206:print-book 1
+1632920526147:print-all-authors
+1632920715528:print-book 2
+1632920878055:print-all-books
+1632929367694:help
+1632929374004:print-all-books
+1633172899596:help
+1633172910076:print-all-authors
+1633172938743:add-author "Самуил Яковлевич Маршак"
+1633172957418:print-all-authors
+1633172963949:help
+1633172980362:print-author 5
+1633172988951:delete-author 5
+1633173103142:print-all-authors
+1633173144066:add-author "амуил яковлевич Маршак"
+1633173155337:print-all-authors
+1633173176075:print-author 5
+1633173184623:delete-author 5
+1633173191377:print-all-authors
+1633173197041:print-all-genres
+1633173219226:add-genre "повесть"
+1633173228170:print-all-genres
+1633173235328:print-genre 8
+1633173249829:delete-genre 8
+1633173256848:print-all-books
+1633173421544:add-book "Айболит"
+1633173513187:stacktrace
+1633173808590:add-book Айболит
+1633173994447:stacktrace
+1633174572013:add-book Айболит
+1633174723131:stacktrace
+1633177108466:add-book Мойдодыр
+1633177146727:stacktrace
+1633178094085:add-book Test
+1633178241311:add-book testbook
+1633178654342:stacktrace
+1633178905461:print-all-books
+1633178913022:add-book testbook
+1633178998956:print-all-books
+1633179012219:add-book testbook
+1633179603115:exit
+1633179909296:add-book testbook
+1633180006089:add-book test
+1633180566452:print-all-books
+1633180710077:add-book "Анна Каренина"
+1633180752064:print-all-books
+1633187834395:add-book testbook
+1633187862568:print-all-books
+1633188186939:help
+1633188211422:print-all-comments
+1633188931089:help
+1633188938938:print-book-comments 5
+1633188950661:pritn-all-comments
+1633188965171:print-all-comments
+1633189006252:print-all-books
+1633189016777:add-book testbok
+1633189031943:print-book 9
+1633189046110:help
+1633189075484:add-comment 9 "comment for test book"
+1633189158225:add-comment 9 "second test comment"
+1633189168597:print-book-comments 9
+1633193015599:print-all0books
+1633193022185:print-all-books
+1633193051767:update-book 1 "Мир и война"
+1633193075224:stacktrace
+1633193119427:update-book 1 "Мир и война"
+1633193132007:stacktrace
+1633193522282:add-book testbook
+1633193541149:update-book 9 testest
+1633193569150:add-book testbook
+1633193582057:update-book 9
+1633193592913:update-book 9 testtest
+1633193769727:add-book testbook
+1633193789243:update-book 9 testest
+1633461648938:print-all-comment
+1633461657022:print-all-comments
+1633461671009:print-comment 1
+1633461755251:print-all-authors
+1633461785791:print-all0authors
+1633461793790:print-all-authors
+1633461840769:add-author testuathor
+1633461909512:print-all-books
+1633461916973:print-book 1
+1633464983595:help
+1633464993716:choose-author 1
+1633466239477:print-all-authors
+1633466246959:delete-author
+1633466394438:print-all-authors
+1633466400793:delete-author
+1633466408142:choose-author 1
+1633466654574:choose-book 1
+1633466662931:choose-author 1
+1633466670025:delete-author
+1633550650976:help
+1633550670521:print-all-comments
+1633550679089:choose-comment 1
+1633550690076:delete-comment
+1633550742230:choose-author 1
+1633550746715:delete-author
+1633622070586:delete-book 1
+1633622076112:print-all-books
+1633622089189:delete-book 1
+1633622112522:print-all-authors
+1633622119123:delete-author 1
+1633622415887:print-all-books
+1633622440173:delete-book 1
+1633622447428:print-all-books
+1633622529253:help
+1633622541362:print-all-comments
+1633622804439:help
+1633622810725:print-book-comments 1
+1633622887498:print-all-comments
+1633622967378:pritn-all-comments
+1633622977304:print-all-comments
+1633623031190:print-all-cooks
+1633623038194:print-all-books
+1633623101605:print-allbooks
+1633623107232:print-all-bookd
+1633623112441:print-all-books
+1633623140003:print-all-comments
+1633870267723:help
+1633870281419:print-all-authors
+1633870300131:add-author Маршак
+1633870308235:print-all-authors
+1633870557256:exit
+1633875925162:help
+1633875932593:print-all-authors
+1633875945925:print-author
+1633875961154:delete-author 2
+1633875966389:print-all-authors
+1633875977560:add-author Test Author
+1633875993466:add-author "Test Author"
+1633875999315:print-all-authors
+1633876669545:update-author 3 "Test Author"
+1633876678032:print-all-authors
+1633876706058:print-all-books
+1633878022780:help
+1633878027016:print-all-authors
+1633878032038:help
+1633878052716:add-author "Test Author"
+1633878062581:print-all-authors
+1633878080715:update-author 5 "Renamed Test Author"
+1633878085371:print-all-authors
+1633878092846:delte-author 5
+1633878099484:delete-author 5
+1633878104733:print-all-authors
+1633878460458:help
+1633878471133:print-all-comments
+1633878479560:print-all-books
+1633878507532:print-book-commetns 1
+1633878525373:help
+1633878534969:print-book-comments 1
+1633878561964:update-comment 1 "New comment text"
+1633878697833:update-comment 1 "Updated comment text"
+1633878707593:print-book-commente 1
+1633878720145:print-book-comments 1
+1633878926237:help
+1633878934010:print-all-books
+1633878941001:delete-book 1
+1633878945969:print-all-books
+1633878967093:update-book 2 "Test update"
+1633878977590:print-all-books
+1633890058457:print-all-comments
+1633890262776:print-all-books
+1633890274185:help
+1633890300235:print-book-comments 1
