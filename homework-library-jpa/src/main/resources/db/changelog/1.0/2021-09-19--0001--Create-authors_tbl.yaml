@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2021-09-19--0001--Create-author_tbl
+      author: Anton Sulakov
+      createTable:
+        tableName: authors_tbl
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_authors
+          - column:
+              name: name
+              type: varchar(255)
