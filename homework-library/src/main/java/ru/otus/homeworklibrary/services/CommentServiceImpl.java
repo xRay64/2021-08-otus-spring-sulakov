@@ -35,9 +35,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<BookComment> getByBookId(long bookId) {
-        Book book = bookRepository.find(bookId).orElseThrow(() -> new RuntimeException("Error getting book in comment servise"));
-        return book.getBookComments();
+    public List<BookComment> getByBook(Book book) {
+        return repository.findByBook(book);
     }
 
     @Override

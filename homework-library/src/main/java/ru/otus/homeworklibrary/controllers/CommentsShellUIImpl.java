@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import ru.otus.homeworklibrary.models.Book;
+import ru.otus.homeworklibrary.services.BookService;
 import ru.otus.homeworklibrary.services.CommentService;
 
 @ShellComponent()
@@ -11,6 +13,7 @@ import ru.otus.homeworklibrary.services.CommentService;
 public class CommentsShellUIImpl implements CommentsShellUI {
 
     private final CommentService commentService;
+    private final BookService bookService;
 
     @Override
     @ShellMethod("Print comment by its id")
@@ -21,7 +24,8 @@ public class CommentsShellUIImpl implements CommentsShellUI {
     @Override
     @ShellMethod("Print comments by book id")
     public void printBookComments(@ShellOption long book_id) {
-        commentService.getByBookId(book_id).forEach(System.out::println);
+        Book book = bookService.get(book_id);
+        commentService.getByBook(book).forEach(System.out::println);
     }
 
     @Override
