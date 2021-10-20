@@ -1,5 +1,6 @@
 package ru.otus.homeworklibrary.services;
 
+import ru.otus.homeworklibrary.models.Book;
 import ru.otus.homeworklibrary.models.BookComment;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface CommentService {
 
     BookComment getComment(long id);
 
-    List<BookComment> getByBookId(long bookId);
+    List<BookComment> getByBook(Book book);
 
     void updateComment(long id, String comment_text);
 

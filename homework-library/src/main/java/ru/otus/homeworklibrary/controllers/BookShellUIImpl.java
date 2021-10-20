@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.otus.homeworklibrary.models.Book;
 import ru.otus.homeworklibrary.services.BookService;
 
 @ShellComponent
@@ -16,15 +15,13 @@ public class BookShellUIImpl implements BookShellUI{
     @Override
     @ShellMethod("print book by id")
     public void printBook(long id) {
-        System.out.println(bookService.get(id));
+        System.out.println(bookService.getWithComments(id));
     }
 
     @Override
     @ShellMethod("print all books")
     public void printAllBooks() {
-        for (Book book : bookService.getAll()) {
-            System.out.println(book);
-        }
+        bookService.getAllWithComment().forEach(System.out::println);
     }
 
     @Override

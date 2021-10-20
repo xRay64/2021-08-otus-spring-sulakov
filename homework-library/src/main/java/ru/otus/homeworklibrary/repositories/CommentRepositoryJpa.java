@@ -2,6 +2,7 @@ package ru.otus.homeworklibrary.repositories;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.otus.homeworklibrary.models.Book;
 import ru.otus.homeworklibrary.models.BookComment;
 
 import javax.persistence.EntityManager;
@@ -34,6 +35,20 @@ public class CommentRepositoryJpa implements CommentRepository {
     @Override
     public Optional<BookComment> findById(long id) {
         return Optional.ofNullable(em.find(BookComment.class, id));
+    }
+
+    @Override
+    public List<BookComment> findByBook(Book book) {
+        TypedQuery<BookComment> query = em.createQuery("select c from BookComment c where c.book = :book", BookComment.class);
+        query.setParameter("book", book);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<BookComment> findByBooks(List<Book> books) {
+        TypedQuery<BookComment> query = em.createQuery("select c from BookComment c where c.book in :books", BookComment.class);
+        query.setParameter("books", books);
+        return query.getResultList();
     }
 
     @Override

@@ -5,11 +5,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homeworklibrary.models.Author;
 import ru.otus.homeworklibrary.models.Book;
+import ru.otus.homeworklibrary.models.BookComment;
 import ru.otus.homeworklibrary.models.Genre;
 import ru.otus.homeworklibrary.repositories.AuthorRepository;
 import ru.otus.homeworklibrary.repositories.BookRepository;
+import ru.otus.homeworklibrary.repositories.CommentRepository;
 import ru.otus.homeworklibrary.repositories.GenreRepository;
+import ru.otus.homeworklibrary.services.dto.BookDto;
 import ru.otus.homeworklibrary.services.ext.BookParamsProvider;
+import ru.otus.homeworklibrary.services.ext.MappingUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,7 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
     private final BookRepository bookRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public List<Book> getAll() {
@@ -29,8 +34,36 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BookDto> getAllWithComment() {
+        List<Book> bookList = bookRepository.findAll();
+        List<BookComment> commentList = commentRepository.findByBooks(bookList);
+        List<BookDto> bookDtoList = new ArrayList<>();
+        for (Book book : bookList) {
+            BookDto currentBookDto = MappingUtils.mapToBookDto(book);
+            List<BookComment> currentCommentList = new ArrayList<>();
+            for (BookComment comment : commentList) {
+                if (comment.getBook().getId() == book.getId()) {
+                    currentCommentList.add(comment);
+                }
+            }
+            currentBookDto.setComments(currentCommentList);
+            bookDtoList.add(currentBookDto);
+        }
+        return bookDtoList;
+    }
+
+    @Override
     public Book get(long id) {
         return bookRepository.find(id).orElseThrow(() -> new RuntimeException("Book id isn't exists"));
+    }
+
+    @Override
+    @Transactional
+    public BookDto getWithComments(long id) {
+        Book book = bookRepository.find(id).orElseThrow(() -> new RuntimeException("Book id isn't exists"));
+        BookDto bookDto = MappingUtils.mapToBookDto(book);
+        bookDto.setComments(commentRepository.findByBook(book));
+        return bookDto;
     }
 
     @Override
