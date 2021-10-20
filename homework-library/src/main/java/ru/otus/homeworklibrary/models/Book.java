@@ -34,7 +34,8 @@ public class Book {
     private List<Genre> genreList;
 
     @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", orphanRemoval = true)
+    @ToString.Exclude
     private List<BookComment> bookComments;
 
     public Book(long id, String name, List<Author> author, List<Genre> genreList) {

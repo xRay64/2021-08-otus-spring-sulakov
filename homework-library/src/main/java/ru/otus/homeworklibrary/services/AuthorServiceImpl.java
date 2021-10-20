@@ -2,10 +2,10 @@ package ru.otus.homeworklibrary.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homeworklibrary.models.Author;
 import ru.otus.homeworklibrary.repositories.AuthorRepository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service

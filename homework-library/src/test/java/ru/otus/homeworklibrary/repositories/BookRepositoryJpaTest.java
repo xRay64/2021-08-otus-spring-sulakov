@@ -111,9 +111,11 @@ class BookRepositoryJpaTest {
         genreList.add(new Genre(1L, "Genre1"));
         expectedBook.setGenreList(genreList);
         repository.update(expectedBook);
+        expectedBook.getBookComments().size();
         em.flush();
         em.detach(expectedBook);
         Book updatedBook = em.find(Book.class, THIRD_BOOK_ID);
+//        updatedBook.getBookComments().size();
 
         System.out.println(expectedBook);
         System.out.println(updatedBook);

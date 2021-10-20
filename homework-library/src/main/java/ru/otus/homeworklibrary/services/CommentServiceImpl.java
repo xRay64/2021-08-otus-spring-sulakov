@@ -2,24 +2,23 @@ package ru.otus.homeworklibrary.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homeworklibrary.models.Book;
 import ru.otus.homeworklibrary.models.BookComment;
-import ru.otus.homeworklibrary.repositories.BookRepository;
 import ru.otus.homeworklibrary.repositories.CommentRepository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private CommentRepository repository;
-    private BookRepository bookRepository;
+    private BookService bookService;
 
     @Override
     @Transactional
     public long addComment(String comment_text, long book_id) {
-        Book commentedBook = bookRepository.find(book_id).get();
+        Book commentedBook = bookService.get(book_id);
         BookComment newComment = repository.save(new BookComment(0, comment_text, commentedBook));
         return newComment.getId();
     }
@@ -35,8 +34,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BookComment> getByBookId(long bookId) {
-        Book book = bookRepository.find(bookId).orElseThrow(() -> new RuntimeException("Error getting book in comment servise"));
+        Book book = bookService.get(bookId);
+        book.getBookComments().size();
         return book.getBookComments();
     }
 
