@@ -1,9 +1,9 @@
 databaseChangeLog:
   - changeSet:
-      id: 2021-09-19--0004--Create-book_genre_tbl
+      id: 2021-09-28--0002--Create-comments_tbl
       author: Anton Sulakov
       createTable:
-        tableName: book_genre_tbl
+        tableName: comments_tbl
         columns:
           - column:
               name: id
@@ -12,22 +12,16 @@ databaseChangeLog:
               constraints:
                 nullable: false
                 primaryKey: true
-                primaryKeyName: pk_book_genre
+                primaryKeyName: pk_comments
+          - column:
+              name: comment_text
+              type: varchar2(4000)
           - column:
               name: book_id
               type: bigint
               constraints:
                   nullable: false
                   foreighnKey:
-                    foreignKeyName: fk_bookgenre_book_id
+                    foreignKeyName: fk_comments_book_id
                     baseTableName: books_tbl
-                    baseColumnName: id
-          - column:
-              name: genre_id
-              type: bigint
-              constraints:
-                  nullable: false
-                  foreighnKey:
-                    foreignKeyName: fk_bookgenre_genre_id
-                    baseTableName: genres_tbl
                     baseColumnName: id

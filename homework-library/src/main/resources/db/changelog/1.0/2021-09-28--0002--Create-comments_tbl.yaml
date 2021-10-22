@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2021-09-28--0002--Create-comments_tbl
+      author: Anton Sulakov
+      createTable:
+        tableName: comments_tbl
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_comments
+          - column:
+              name: comment_text
+              type: varchar2(4000)
+          - column:
+              name: book_id
+              type: bigint
+              constraints:
+                nullable: false
+                foreighnKey:
+                  foreignKeyName: fk_comments_book_id
+                  baseTableName: books_tbl
+                  baseColumnName: id
