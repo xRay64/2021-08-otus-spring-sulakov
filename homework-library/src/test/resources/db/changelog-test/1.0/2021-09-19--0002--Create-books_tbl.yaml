@@ -16,13 +16,3 @@ databaseChangeLog:
           - column:
               name: name
               type: varchar(255)
-          - column:
-              name: author_id
-              type: bigint
-              constraints:
-                nullable: false
-                foreighnKey:
-                  uniqueConstraint: true
-                  foreignKeyName: fk_books_auther
-                  baseTableName: authors_tbl
-                  baseColumnName: id

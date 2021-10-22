@@ -1,9 +1,9 @@
 databaseChangeLog:
   - changeSet:
-      id: 2021-09-19--0004--Create-book_genre_tbl
+      id: 2021-09-28--0001--Create-genre_tbl
       author: Anton Sulakov
       createTable:
-        tableName: book_genre_tbl
+        tableName: book_author_tbl
         columns:
           - column:
               name: id
@@ -12,22 +12,22 @@ databaseChangeLog:
               constraints:
                 nullable: false
                 primaryKey: true
-                primaryKeyName: pk_book_genre
+                primaryKeyName: pk_book_author
           - column:
               name: book_id
               type: bigint
               constraints:
                   nullable: false
                   foreighnKey:
-                    foreignKeyName: fk_bookgenre_book_id
+                    foreignKeyName: fk_bookauthor_book_id
                     baseTableName: books_tbl
                     baseColumnName: id
           - column:
-              name: genre_id
+              name: author_id
               type: bigint
               constraints:
                   nullable: false
                   foreighnKey:
-                    foreignKeyName: fk_bookgenre_genre_id
-                    baseTableName: genres_tbl
+                    foreignKeyName: fk_bookauthor_author_id
+                    baseTableName: authors_tbl
                     baseColumnName: id

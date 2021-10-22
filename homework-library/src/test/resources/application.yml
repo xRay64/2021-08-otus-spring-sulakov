@@ -16,3 +16,12 @@ spring:
       settings:
         web-allow-others: true
       enabled: true
+
+  jpa:
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true

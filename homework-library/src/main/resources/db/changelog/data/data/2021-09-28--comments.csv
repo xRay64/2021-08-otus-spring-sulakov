@@ -1,0 +1,12 @@
+id;book_id;comment_text
+1;1;book1 comment 1
+2;2;book2 comment 2
+3;3;book3 comment 3
+4;4;book4 comment 4
+5;5;book5 comment 5
+6;6;book6 comment 6
+7;7;book7 comment 7
+8;8;book8 comment 8
+9;1;book1 comment 9
+10;2;book2 comment 10
+11;2;book2 comment 11
