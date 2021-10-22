@@ -2,6 +2,7 @@ package ru.otus.homeworklibrary.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homeworklibrary.models.Author;
 import ru.otus.homeworklibrary.models.Book;
 import ru.otus.homeworklibrary.models.Genre;
@@ -10,7 +11,6 @@ import ru.otus.homeworklibrary.repositories.BookRepository;
 import ru.otus.homeworklibrary.repositories.GenreRepository;
 import ru.otus.homeworklibrary.services.ext.BookParamsProvider;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,11 +55,9 @@ public class BookServiceImpl implements BookService {
         updatingBook.setName(name);
         updatingBook.setAuthor(authorList);
         updatingBook.setGenreList(bookGenres);
-        bookRepository.save(updatingBook);
     }
 
     @Override
-    @Transactional
     public void delete(long id) {
         bookRepository.deleteById(id);
     }

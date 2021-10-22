@@ -34,6 +34,12 @@ public class GenresShellUIImpl implements GenresShellUI{
     }
 
     @Override
+    @ShellMethod("Update genre by id")
+    public void updateGenre(@ShellOption long id, @ShellOption String name) {
+        genresService.updateGenre(id, name);
+    }
+
+    @Override
     @ShellMethod("Delete genre from genres list by id")
     public void deleteGenre(@ShellOption long id) {
         genresService.deleteGenre(id);
