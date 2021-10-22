@@ -35,10 +35,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BookComment> getByBookId(long bookId) {
-        Book book = bookService.get(bookId);
-        book.getBookComments().size();
-        return book.getBookComments();
+    public List<BookComment> getByBook(Book book) {
+        return repository.findByBook(book);
     }
 
     @Override
