@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2021-09-19--0004--Create-book_genre_tbl
+      author: Anton Sulakov
+      createTable:
+        tableName: book_genre_tbl
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_book_genre
+          - column:
+              name: book_id
+              type: bigint
+              constraints:
+                  nullable: false
+                  foreighnKey:
+                    foreignKeyName: fk_bookgenre_book_id
+                    baseTableName: books_tbl
+                    baseColumnName: id
+          - column:
+              name: genre_id
+              type: bigint
+              constraints:
+                  nullable: false
+                  foreighnKey:
+                    foreignKeyName: fk_bookgenre_genre_id
+                    baseTableName: genres_tbl
+                    baseColumnName: id

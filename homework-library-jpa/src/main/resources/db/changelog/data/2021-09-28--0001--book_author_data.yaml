@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2021-09-28--0001--book_author_data
+      author: Anton Sulakov
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2021-09-28--book_author.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: book_author_tbl

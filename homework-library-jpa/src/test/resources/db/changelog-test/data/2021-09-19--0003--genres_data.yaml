@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2021-09-19--0003--genre_data
+      author: Anton Sulakov
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2021-09-19--genres.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: genres_tbl
