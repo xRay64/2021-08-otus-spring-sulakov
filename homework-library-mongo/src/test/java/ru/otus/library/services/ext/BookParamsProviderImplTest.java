@@ -10,7 +10,9 @@ import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import ru.otus.library.models.Author;
 import ru.otus.library.models.Genre;
+import ru.otus.library.repositories.AuthorRepository;
 import ru.otus.library.repositories.BookRepository;
+import ru.otus.library.repositories.GenreRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,6 +28,10 @@ class BookParamsProviderImplTest {
 
     @MockBean
     BookRepository bookRepository;
+    @MockBean
+    AuthorRepository authorRepository;
+    @MockBean
+    GenreRepository genreRepository;
 
     private final List<Author> authorList = List.of(
             new Author("author-001", "Test Author 1"),
@@ -44,12 +50,12 @@ class BookParamsProviderImplTest {
     @DisplayName("запрашивать у пользователя выбрать автора из списка")
     void shouldAskUserForAuthor() {
 
-        Mockito.when(bookRepository.findAllAuthors())
+        Mockito.when(authorRepository.findAll())
                 .thenReturn(authorList);
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream("3\n".getBytes());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository);
+        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository, authorRepository, genreRepository);
 
         Author returnedAuthor = bookParamsProvider.getAuthorFromUser();
 
@@ -63,12 +69,12 @@ class BookParamsProviderImplTest {
     @DisplayName("возвращать нового автора имя которого пользователь ввел с клавиатуры")
     void shouldReturnAuthorEnteredByUser() {
 
-        Mockito.when(bookRepository.findAllAuthors())
+        Mockito.when(authorRepository.findAll())
                 .thenReturn(authorList);
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream("New Author\n".getBytes());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository);
+        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository, authorRepository, genreRepository);
 
         Author returnedAuthor = bookParamsProvider.getAuthorFromUser();
 
@@ -85,12 +91,12 @@ class BookParamsProviderImplTest {
     @DisplayName("запрашивать у пользователя выбрать жанр из списка")
     void shouldAskUserForChooseGenre() {
 
-        Mockito.when(bookRepository.findAllGenres())
+        Mockito.when(genreRepository.findAll())
                 .thenReturn(genreList);
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream("2,3\n".getBytes());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository);
+        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository, authorRepository, genreRepository);
 
         List<Genre> returnedGenreList = bookParamsProvider.getGenreListFromUser();
 
@@ -104,12 +110,12 @@ class BookParamsProviderImplTest {
     @DisplayName("возвращать список новых жанров имена которых пользователь ввел с клавиатуры")
     void shouldReturnGenresEnteredByUser() {
 
-        Mockito.when(bookRepository.findAllGenres())
+        Mockito.when(genreRepository.findAll())
                 .thenReturn(genreList);
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream("New genre 1, New genre 2\n".getBytes());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository);
+        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository, authorRepository, genreRepository);
 
         List<Genre> returnedGenreList = bookParamsProvider.getGenreListFromUser();
         System.out.println(returnedGenreList);
@@ -128,7 +134,7 @@ class BookParamsProviderImplTest {
 
         ByteArrayInputStream inputStream = new ByteArrayInputStream("".getBytes());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository);
+        BookParamsProviderImpl bookParamsProvider = new BookParamsProviderImpl(inputStream, new PrintStream(outputStream), bookRepository, authorRepository, genreRepository);
 
         Assertions.assertThat(bookParamsProvider.getNewBookId())
                 .isEqualTo("book-011");

@@ -1,11 +1,14 @@
 package ru.otus.library.services.ext;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.otus.library.models.Author;
+import ru.otus.library.models.Comment;
 import ru.otus.library.models.Genre;
+import ru.otus.library.repositories.AuthorRepository;
 import ru.otus.library.repositories.BookRepository;
+import ru.otus.library.repositories.GenreRepository;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -23,21 +26,24 @@ public class BookParamsProviderImpl implements BookParamsProvider {
     private static final String AUTHOR_ID_PREFIX = "author-";
     private static final String GENRE_ID_PREFIX = "genre-";
 
-    @Lazy
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final GenreRepository genreRepository;
 
     public BookParamsProviderImpl(@Value("#{T (java.lang.System).in}") InputStream inputStream,
                                   @Value("#{T (java.lang.System).out}") PrintStream printStream,
-                                  BookRepository bookRepository) {
+                                  BookRepository bookRepository, AuthorRepository authorRepository, GenreRepository genreRepository) {
         this.inputStream = inputStream;
         this.printStream = printStream;
         this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
+        this.genreRepository = genreRepository;
     }
 
     @Override
     public Author getAuthorFromUser() {
         lazyInputStreamInitialize();
-        List<Author> authorList = bookRepository.findAllAuthors();
+        List<Author> authorList = authorRepository.findAll();
         int authorIdChosenByUser = -1;
         String authorNameEnteredByUser = null;
         for (int i = 0; i < authorList.size(); i++) {
@@ -66,7 +72,7 @@ public class BookParamsProviderImpl implements BookParamsProvider {
     @Override
     public List<Genre> getGenreListFromUser() {
         lazyInputStreamInitialize();
-        List<Genre> genreList = bookRepository.findAllGenres();
+        List<Genre> genreList = genreRepository.findAll();
         List<Integer> genreIdsChosenByUser = new ArrayList<>();
         List<String> genreNamesChosenByUser = new ArrayList<>();
         for (int i = 0; i < genreList.size(); i++) {
@@ -95,6 +101,27 @@ public class BookParamsProviderImpl implements BookParamsProvider {
             }
         }
         return resultGenreList;
+    }
+
+    @Override
+    public List<Comment> getCommentsFromUser() {
+        List<Comment> resultList = null;
+        printStream.println("Введите комментарий к книге");
+        printStream.println("Можно ввести несколько комментариев через запятую");
+        String userInput;
+        try {
+            userInput = reader.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String[] commentsTextList = null;
+        if (userInput != null) {
+            commentsTextList = userInput.split(",");
+        }
+        if (commentsTextList != null) {
+            resultList = Arrays.stream(commentsTextList).map(s -> new Comment(ObjectId.get().toString(), s)).collect(Collectors.toList());
+        }
+        return resultList;
     }
 
     @Override

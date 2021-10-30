@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.library.models.Author;
 import ru.otus.library.models.Book;
+import ru.otus.library.models.Comment;
 import ru.otus.library.models.Genre;
 import ru.otus.library.repositories.BookRepository;
 import ru.otus.library.services.ext.BookParamsProvider;
@@ -27,21 +28,25 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Author> getAllAuthors() {
-        return bookRepository.findAllAuthors();
-    }
-
-    @Override
-    public List<Genre> getAllGenres() {
-        return bookRepository.findAllGenres();
-    }
-
-    @Override
     public void add(String name) {
         List<Author> authorList = List.of(bookParamsProvider.getAuthorFromUser());
         List<Genre> genreList = bookParamsProvider.getGenreListFromUser();
-        Book newBook = new Book(bookParamsProvider.getNewBookId(), name, authorList, genreList);
+        List<Comment> commentList = bookParamsProvider.getCommentsFromUser();
+        Book newBook = new Book(bookParamsProvider.getNewBookId(), name, authorList, genreList, commentList);
         bookRepository.save(newBook);
+    }
+
+    @Override
+    public void update(String id, String name) {
+        Book updatedBook = bookRepository.findById(id).orElseThrow(RuntimeException::new);
+        List<Author> authorList = List.of(bookParamsProvider.getAuthorFromUser());
+        List<Genre> genreList = bookParamsProvider.getGenreListFromUser();
+        List<Comment> commentList = bookParamsProvider.getCommentsFromUser();
+        updatedBook.setName(name);
+        updatedBook.setAuthorList(authorList);
+        updatedBook.setGenreList(genreList);
+        updatedBook.setCommentList(commentList);
+        bookRepository.save(updatedBook);
     }
 
     @Override

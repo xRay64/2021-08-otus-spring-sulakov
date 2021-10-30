@@ -24,17 +24,6 @@ public class BookShellUIImpl implements BookShellUI {
         bookService.getAll().forEach(System.out::println);
     }
 
-    @Override
-    @ShellMethod("print all authors")
-    public void printAllAuthors() {
-        bookService.getAllAuthors().forEach(System.out::println);
-    }
-
-    @Override
-    @ShellMethod("print all genres")
-    public void printAllGenres() {
-        bookService.getAllGenres().forEach(System.out::println);
-    }
 
     @Override
     @ShellMethod("add a book to database")
@@ -43,12 +32,12 @@ public class BookShellUIImpl implements BookShellUI {
         System.out.println("Книга добавлена");
     }
 
-    /*@Override
+    @Override
     @ShellMethod("update book in database")
-    public void updateBook(@ShellOption long id, @ShellOption String name) {
+    public void updateBook(@ShellOption String id, @ShellOption String name) {
         bookService.update(id, name);
         System.out.println("Книга с ID " + id + " обновлена");
-    }*/
+    }
 
     @Override
     @ShellMethod("delete book by id")

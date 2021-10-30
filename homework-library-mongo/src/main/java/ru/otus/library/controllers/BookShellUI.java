@@ -7,11 +7,7 @@ public interface BookShellUI {
 
     void addBook(String name);
 
-//    void updateBook(long id, String name);
-
-    void printAllAuthors();
-
-    void printAllGenres();
+    void updateBook(String id, String newBookName);
 
     void deleteBook(String id);
 }
