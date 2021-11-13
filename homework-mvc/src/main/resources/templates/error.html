@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Something goes wrong</title>
+</head>
+<body>
+<h1>Ooops. Something goes wrong =(</h1>
+<div th:if="${errMessage}">
+    <h2>Thres is an error</h2>
+    <p th:text="${errMessage}"></p>
+</div>
+</body>
+</html>

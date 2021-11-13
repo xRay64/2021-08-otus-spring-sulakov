@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Authors</title>
+    <style type="text/css">
+        body {
+            padding-left: 50px;
+            padding-top: 20px;
+        }
+
+        .authors, .authors td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<a href="/">&lt;&lt;&lt;back</a>
+<h1>Authors</h1>
+<span>
+    <h3 style="display: inline"><a href="/">Books</a></h3>&nbsp;&nbsp;
+    <h3 style="display: inline"><a href="/genres">Genres</a></h3>
+    <h3></h3> <!--перенос строки после меню-->
+</span>
+<table class="authors">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="author: ${authors}">
+        <td th:text="${author.getName()}">
+            Author name
+        </td>
+        <td>
+            <a href="/autor" th:href="@{/authors/edit(authorId=${author.getId()})}">Edit</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br/>
+<a href="/authors/add">Add Author</a>
+</body>
+</html>
