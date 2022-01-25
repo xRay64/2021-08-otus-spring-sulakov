@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OTUS Library</title>
+    <style type="text/css">
+        body {
+            padding-left: 50px;
+            padding-top: 20px;
+        }
+
+        .books, .books td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Welcome to the library</h1>
+<span>
+    <h3 style="display: inline"><a href="/authors">Authors</a></h3>&nbsp;&nbsp;
+    <h3 style="display: inline"><a href="/genres">Genres</a></h3>
+    <h3></h3> <!--перенос строки после меню-->
+</span>
+<table class="books">
+    <thead>
+    <tr>
+        <th>Book name</th>
+        <th>Authors</th>
+        <th>Genres</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book: ${books}">
+        <td th:text="${book.getName()}">The name of a book</td>
+        <td>
+        <span th:each="author,iterStat: ${book.getAuthorList()}">
+            <span th:text="${author} != null ? (${!iterStat.last} ? ${author.getName()} + ',' : ${author.getName()})">Author name</span>
+        </span>
+        </td>
+        <td>
+            <span th:each="genre, iterStat: ${book.getGenreList()}">
+                <span th:text="${genre} != null ? (${!iterStat.last} ? ${genre.getName()} + ',' : ${genre.getName()})">Genre name</span>
+            </span>
+        </td>
+        <td>
+        <a href="/book" th:href="@{/book/edit(bookId=${book.getId()})}">Edit</a>
+        </td>
+        <td>
+        <a href="/comments" th:href="@{/book/comments(bookId=${book.getId()})}">View comments</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a href="bookAdd.html" th:href="@{/book/add}">Add book</a>
+</body>
+</html>

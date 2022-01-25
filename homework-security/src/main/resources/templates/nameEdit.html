@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input {
+            width: 300px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<a href="/" th:href="@{/{type}(type=${type})}">&lt;&lt;&lt;back</a>
+<div th:object="${editedObject}">
+    <form id="name-edit" action="nameEdit.html" th:method="post" th:action="@{/{type}/edit(type=${type})}">
+        <h1>Name edit:</h1>
+
+        <div class="row">
+            <label for="id-input">ID:</label>
+            <input id="id-input" type="text" name="id" readonly="readonly" th:value="*{id}" value="1"/>
+        </div>
+
+        <div class="row">
+            <label for="holder-input">Name:</label>
+            <input id="holder-input" name="name" type="text" th:value="*{name}" value="Name placeholder"/>
+        </div>
+
+        <div class="row">
+            <button type="submit">Save</button>
+        </div>
+    </form>
+    <form id="delete" action="genreList.html" th:method="post" th:action="@{/{type}/delete(type=${type}, id=${editedObject.getId()})}">
+        <button type="submit">Delete</button>
+    </form>
+
+</div>
+</body>
+</html>
