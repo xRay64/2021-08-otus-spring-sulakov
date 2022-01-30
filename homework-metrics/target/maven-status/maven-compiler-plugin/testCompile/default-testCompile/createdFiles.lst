@@ -1,0 +1,9 @@
+ru/otus/library/controllers/GenreControllerTest$AddConfig.class
+ru/otus/library/controllers/GenreControllerTest.class
+ru/otus/library/controllers/BookControllerTest$AddConfig.class
+ru/otus/library/controllers/AuthorControllerTest$AddConfig.class
+ru/otus/library/testchangelog/DatabaseChangelog.class
+ru/otus/library/controllers/BookControllerTest.class
+ru/otus/library/controllers/CommentControllerTest.class
+ru/otus/library/repositories/BookRepositoryTest.class
+ru/otus/library/controllers/AuthorControllerTest.class
