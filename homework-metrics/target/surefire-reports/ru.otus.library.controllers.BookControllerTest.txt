@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: ru.otus.library.controllers.BookControllerTest
--------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.995 s - in ru.otus.library.controllers.BookControllerTest
