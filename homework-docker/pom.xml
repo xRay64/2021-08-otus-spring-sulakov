@@ -87,6 +87,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>library-app-docker</finalName>
     </build>
 
 </project>
