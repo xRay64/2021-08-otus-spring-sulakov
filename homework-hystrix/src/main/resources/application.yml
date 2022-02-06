@@ -1,0 +1,25 @@
+spring:
+  data:
+    mongodb:
+      database: library
+      port: 27017
+      host: localhost
+mongock:
+#  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.library.mongock.changelog
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+    logfile:
+      enabled: true
+logging:
+  file:
+    name: "application.log"
