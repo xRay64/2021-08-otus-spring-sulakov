@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-02-26--0001--Create-params-table
+      author: Anton Sulakov
+      createTable:
+        tableName: app_params
+        columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                nullable: false
+                primaryKey: true
+                primaryKeyName: pk_params
+          - column:
+              name: name
+              type: varchar(255)
+          - column:
+              name: value
+              type: varchar(4000)

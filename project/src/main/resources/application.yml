@@ -1,0 +1,50 @@
+application:
+  plugin-artifact-provider:
+    nexus-repo-host: "https://repo.corp.tander.ru"
+    search-api-path: "/service/rest/v1/search"
+    search-parameter-name: "maven.artifactId"
+    artifact-name: "gradle-release-plugin"
+  git-repository-reader:
+    repository-url: "https://github.com/xRay64/otus_database_repo.git"
+    repository-host: "https://coderepo.corp.tander.ru"
+    host-api-path: "api/v4/projects"
+    api-branches-sub-path: "repository/branches"
+    query-toke-param-name: "private_token"
+    access-token: "vxQEGKquUwfQzVc3J-R3"
+  repository-folders-filter:
+    filtered-folders: "template, ci"
+  template-processor:
+    template-path: "/Users/anton/work/OTUS/2021-08-otus-spring-sulakov/project/templates/"
+    template-list: ["build.gradle.tmpl", "dbrelease.sql.tmpl"]
+  hazelcast:
+    time-to-live: 7200 # 60 * 60 * 2
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:configgenerator
+    driver-class-name: org.h2.Driver
+  jpa:
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    enabled: true
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      path: /h2-console
+      settings:
+        web-allow-others: true
+      enabled: true
+  thymeleaf:
+    cache: false
+
+logging:
+  level:
+    root: INFO

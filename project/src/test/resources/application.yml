@@ -1,0 +1,23 @@
+#test config
+application:
+  plugin-artifact-provider:
+    nexus-repo-host: "https://repo.corp.tander.ru"
+    search-api-path: "/service/rest/v1/search"
+    search-parameter-name: "maven.artifactId"
+    artifact-name: "gradle-release-plugin"
+  git-repository-reader:
+    repository-host: "https://coderepo.corp.tander.ru"
+    host-api-path: "api/v4/projects"
+    api-branches-sub-path: "repository/branches"
+    query-toke-param-name: "private_token"
+    access-token: "vxQEGKquUwfQzVc3J-R3"
+  repository-folders-filter:
+    filtered-folders: "folder1, folder2, template"
+  template-processor:
+    template-path: "/Users/anton/work/OTUS/2021-08-otus-spring-sulakov/project/templates/"
+    template-list: ["build.gradle.tmpl", "dbrelease.sql.tmpl"]
+  hazelcast:
+    time-to-live: 2
+logging:
+  level:
+    root: INFO
