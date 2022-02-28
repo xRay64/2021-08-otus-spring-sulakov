@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2022-02-26--0001--params_data
+      author: Anton Sulakov
+      context: test
+      runOnChange: true
+      loadUpdateData:
+        primaryKey: id
+        file: data/2022-02-26--params.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        seperator: ';'
+        encoding: UTF-8
+        tableName: app_params

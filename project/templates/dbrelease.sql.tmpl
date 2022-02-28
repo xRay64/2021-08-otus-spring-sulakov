@@ -1,0 +1,348 @@
+spool ${TMPL_CONFIG_LOG_DIR_NAME}_log_${TMPL_CONFIG_PROJECT_VERSION}.lst
+
+set serveroutput   on
+set define         off
+set feedback       off
+set linesize       300
+set trimout        on
+set trimspool      on
+set autoprint      off
+
+exec dbms_output.enable (buffer_size => null);
+
+WHENEVER SQLERROR EXIT
+
+--Declare Variable--
+variable colored              number;
+variable version_desc         varchar2(2000);
+variable previous_version     varchar2(30);
+variable new_version          varchar2(30);
+variable new_revision         varchar2(40);
+variable sppr_delivery_number varchar2(30);
+variable system_name          varchar2(50);
+
+variable date_created         varchar2(200);
+variable user_created         varchar2(200);
+variable monopol              varchar2(1);
+variable check_vers           varchar2(1);
+variable update_vers          varchar2(1);
+variable update_revision      varchar2(1);
+variable recompiling_after    varchar2(1);
+variable list_debug_pack      varchar2(1);
+variable list_changed_pack    varchar2(1);
+
+variable separator            varchar2(200);
+variable separator_list       varchar2(200);
+variable owner_list           varchar2(2048);
+variable stop_job_list        varchar2(2048);
+variable total_blocks         number;
+variable total_prc            varchar2(200);
+variable total_blocks_install number;
+variable sleep_job_timeout    number;
+variable sleep_timeout        number;
+variable start_script_time    varchar2(200);
+variable duration_time        number;
+------------------------------------------------------------------------------------------------------------------
+
+--Set Variable--
+exec :colored              := 1;
+exec :version_desc         := '${TMPL_CONFIG_LOG_DIR_NAME} assembly ${TMPL_CONFIG_PROJECT_VERSION}';
+exec :previous_version     := '${TMPL_CONFIG_PREVIOUS_VERSION}';
+exec :new_version          := '${TMPL_CONFIG_NEW_VERSION}';
+exec :new_revision         := '';
+exec :sppr_delivery_number := '${TMPL_CONFIG_TASK}';
+exec :system_name          := '${TMPL_CONFIG_SYSTEMNAME}';
+
+exec :date_created         := '${TMPL_CONFIG_DATECREATED}';
+exec :user_created         := '${TMPL_CONFIG_USERCREATED}';
+exec :monopol              := '${TMPL_CONFIG_MONOPOL}';
+exec :check_vers           := '${TMPL_CONFIG_CHECKVERS}';
+exec :update_vers          := '${TMPL_CONFIG_UPDATEVERS}';
+exec :update_revision      := '${TMPL_CONFIG_UPDATEVERS}';
+exec :recompiling_after    := '${TMPL_CONFIG_RECOMPILING}';
+exec :list_debug_pack      := '${TMPL_CONFIG_LISTNODEBUGPACK}';
+exec :list_changed_pack    := '${TMPL_CONFIG_LISTNODEBUGPACK}';
+
+exec :owner_list           := '${projectName}';
+exec :stop_job_list        := '';
+exec :sleep_job_timeout    := 5;
+exec :separator            := '***************************************************************************************************************';
+exec :separator_list       := '---------------------------------------------------------------------------------------------------------------';
+exec :total_blocks         := '${TMPL_CONFIG_TOTALBLOCKS}';
+exec :total_blocks_install := 0;
+exec :start_script_time    := to_char(sysdate,'dd.mm.yyyy hh24:mi:ss');
+------------------------------------------------------------------------------------------------------------------
+
+--Start info--
+declare
+    l_current_user     varchar2(2048);
+begin
+    l_current_user := UPPER(SYS_CONTEXT( 'USERENV', 'CURRENT_USER' ));
+    install.write_log.colored := :colored;
+    
+    install.write_log.txt(' ', 'yellow');
+    install.write_log.txt(' ', 'yellow');
+    install.write_log.txt('+-------------------------------------------Start installation sql update---------------------------------------+', 'yellow');
+    
+    dbms_application_info.set_action('Install '||:new_version);
+    dbms_application_info.set_client_info(:version_desc);
+    
+    install.write_log.inf('INFO', :version_desc);
+    install.write_log.inf('PARAM', 'Current user:              '||l_current_user);
+    install.write_log.inf('PARAM', 'Old version:               '||:previous_version);
+    install.write_log.inf('PARAM', 'New version:               '||:new_version);
+    install.write_log.inf('PARAM', 'Source code revision:      '||:new_revision);
+    install.write_log.inf('PARAM', 'User created:              '||:user_created);
+    install.write_log.inf('PARAM', 'Date created:              '||:date_created);
+    install.write_log.inf('PARAM', 'Monopol:                   '||:monopol);
+    install.write_log.inf('PARAM', 'Check version:             '||:check_vers);
+    install.write_log.inf('PARAM', 'Update version:            '||:update_vers);
+    install.write_log.inf('PARAM', 'Recompiling after:         '||:recompiling_after);
+    install.write_log.inf('PARAM', 'Total blocks:              '||:total_blocks);
+    install.write_log.sep('yellow');
+    
+    if (l_current_user != 'INSTALL') then
+        install.write_log.err('CHECK', 'Current user does not INSTALL');
+        install.write_log.sep('yellow');
+        install.write_log.color('red');
+        raise_application_error(-20001, 'Update must be installed from under user INSTALL');
+    end if;
+
+
+    :total_prc := round((:total_blocks_install * 100) / :total_blocks);
+    :total_blocks_install := :total_blocks_install + 1;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--List users sessions--
+begin
+    install.write_log.inf('CHECK', 'List users sessions');
+    install.write_log.sep('yellow');
+
+    for l_cur in (
+        select
+        s.status,
+        s.username,
+        case when s.machine is null then '-' else s.machine end machine,
+        case when s.module is null then '*' else s.module end module,
+        case when s.action is null  then '*' else s.action end action,
+        case when s.terminal is null  then '*' else s.terminal end terminal,
+        to_char(s.logon_time, 'dd.mm.yyyy hh24:mi:ss') logon_time
+        from gv\$session s
+        where s.username is not null
+        order by s.status, s.username, s.logon_time
+    )
+    loop
+    if ( l_cur.status = 'ACTIVE') then
+        install.write_log.txt('  '      ||
+            l_cur.status     || '    | '||
+            l_cur.logon_time || ' | '   ||
+            l_cur.username   || ' | ['  ||
+            l_cur.module     || '] | '  ||
+            l_cur.action     || ' | '   ||
+            l_cur.machine    || ' | ', 'cyan'
+        );
+    end if;
+    end loop;
+    install.write_log.sep('yellow');
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--Start update--
+begin
+    install.sys_registry.start_upgrade_system(
+        p_system_name => :system_name, 
+        p_prev_version => :previous_version, 
+        p_new_version => :new_version,
+        p_revision => :new_revision, 
+        p_delivery => :sppr_delivery_number,
+        p_check_vers   => :check_vers,
+        p_update_vers  => :update_vers
+    );
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+set role all;
+
+--Branches information--
+exec install.write_log.inf('STAT', 'Statistics of the planned changes');
+exec install.write_log.sep('yellow');
+prompt BranchCurrent: ${TMPL_CONFIG_NEW_BRANCH_NAME} -revision: ${TMPL_CONFIG_NEW_REVISION}
+prompt BranchPrevios: ${TMPL_CONFIG_PREVIOUS_BRANCH_NAME} -revision: ${TMPL_CONFIG_PREVIOUS_REVISION}
+exec install.write_log.sep('yellow');
+
+------------------------------------------------------------------------------------------------------------------
+
+--Checks invalid objects before install--
+begin
+    install.check_invalid_objects_prc;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--Checks wrong encode before install--
+begin
+    install.check_wrong_encod_obj_prc;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+--{TMPL.INSTALL.COUNTBLOCK}--
+begin
+    :total_prc := round((:total_blocks_install * 100) / :total_blocks);
+    :total_blocks_install := :total_blocks_install + 1;
+end;
+/
+
+WHENEVER SQLERROR CONTINUE
+
+------------------------------------------------------------------------------------------------------------------
+${TMPL_SCRIPT_BEFORE_INSTALL}
+------------------------------------------------------------------------------------------------------------------
+
+alter session set current_schema=INSTALL;
+set serveroutput   on
+set define         off
+set feedback       off
+set linesize       300
+set trimout        on
+set trimspool      on
+set autoprint off
+
+exec dbms_output.enable (buffer_size => null);
+------------------------------------------------------------------------------------------------------------------
+
+--{TMPL.INSTALL.COUNTBLOCK}--
+begin
+    :total_prc := round((:total_blocks_install * 100) / :total_blocks);
+    if (:list_changed_pack = 1) then
+        install.write_log.inf('INSTALL', 'Completed: '||:total_prc||'%');
+    end if;
+    :total_blocks_install := :total_blocks_install + 1;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+--Install After Recompiling--
+begin
+    if(:recompiling_after = 1) then
+        install.write_log.inf('INSTALL', 'Install after recompiling');
+    end if;
+end;
+/
+--------------------------------------------------------------------------------
+${TMPL_SCRIPT_AFTER_INSTALL}
+--------------------------------------------------------------------------------
+commit;
+
+--{TMPL.INSTALL.COUNTBLOCK}--
+begin
+    :total_prc := round((:total_blocks_install * 100) / :total_blocks);
+    if(:recompiling_after = 1) then
+        install.write_log.inf('INSTALL', 'Completed: '||:total_prc||'%');
+    end if;
+    :total_blocks_install := :total_blocks_install + 1;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--Recompiling schemas objects--
+begin
+    if(:recompiling_after = 1 ) then
+        install.write_log.inf('RECOMPIL', 'Recompiling schemas objects after install');
+        install.write_log.sep('yellow');
+    end if;
+end;
+/
+
+declare
+    l_owner_list         varchar2(2048);
+begin
+    if(:recompiling_after = 1 ) then
+        for l_cur in(
+         select regexp_substr(str, '[^,]+', 1, level) owner
+                 from (select :owner_list str from dual)
+                connect by level <= length(str) - length(replace(str, ',')) + 1
+        ) loop
+            install.write_log.txt('  Recompiling: '||l_cur.owner, 'gray');
+            dbms_utility.compile_schema(l_cur.owner, false);
+        end loop;
+        install.write_log.sep('yellow');
+    end if;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--{TMPL.INSTALL.COUNTBLOCK}--
+begin
+    :total_prc := round((:total_blocks_install * 100) / :total_blocks);
+    if(:update_vers = 1) then
+        install.write_log.inf('INSTALL', 'Completed: '||:total_prc||'%');
+    end if;
+    :total_blocks_install := :total_blocks_install + 1;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--Update subsystem version NEW--
+begin
+    begin
+        install.sys_registry.is_dc := true;
+        install.sys_registry.continue_upgrade_system(
+            p_system_name => :system_name,
+            p_new_version => :new_version
+        );
+        install.sys_registry.finish_upgrade_system();
+        commit;
+        install.write_log.inf('INSTALL', 'Update subsystem version: '||:new_version);
+    exception
+      when others then
+        install.write_log.err('INSTALL', 'Cannot update subsystem version');
+        install.write_log.trc('INSTALL', sqlerrm);
+    end;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--Checks invalid objects after install--
+begin
+    install.check_invalid_objects_prc;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--Checks wrong encode after install--
+begin
+    install.check_wrong_encod_obj_prc;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--{TMPL.INSTALL.COUNTBLOCK}--
+begin
+    :total_prc := round((:total_blocks_install * 100) / :total_blocks);
+    if(:monopol = 1) then
+        install.write_log.inf('INSTALL', 'Completed: '||:total_prc||'%');
+    end if;
+    :total_blocks_install := :total_blocks_install + 1;
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+--End installation--
+begin
+    install.write_log.inf('INSTALL', 'Run time: '||:start_script_time);
+    install.write_log.inf('INSTALL', 'End time: '||to_char(sysdate,'dd.mm.yyyy hh24:mi:ss'));
+    install.write_log.inf('INSTALL', 'Duration: '||round(:duration_time));
+    install.write_log.inf('INSTALL', 'Installation is completed');
+    install.write_log.txt('+-------------------------------------------End installation sql update-----------------------------------------+', 'yellow');
+    install.write_log.txt('.');
+    install.write_log.txt('.');
+end;
+/
+------------------------------------------------------------------------------------------------------------------
+
+spool off
+
+exit

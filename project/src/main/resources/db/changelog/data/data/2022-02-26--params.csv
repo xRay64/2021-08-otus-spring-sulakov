@@ -1,0 +1,3 @@
+id;name;value
+1;templatePath;/Users/anton/work/OTUS/2021-08-otus-spring-sulakov/project/templates/
+2;templateList;build.gradle.tmpl, dbrelease.sql.tmpl

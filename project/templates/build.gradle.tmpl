@@ -1,0 +1,166 @@
+import ru.tander.dc.gradle.release.*
+
+apply plugin: 'base'
+apply plugin: 'ru.tander.dc.gradle.release'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://repo.corp.tander.ru/repository/${mavenRepositoryURL}"
+        }
+    }
+    dependencies {
+        classpath 'ru.tander.dc:gradle-release-plugin:${pluginVersion}'
+    }
+}
+
+release {
+    packages {
+        "${projectName}" {
+            path = "build/release"
+        }
+    }
+
+    ebuild {
+        ebuildDir = "template"
+        distributionsDir = "build/distributions"
+
+        packageDetails {
+            "dc-db-oracle" {
+                pathInsideArchive = "dc-db-oracle-${project.release.buildVersion}"
+                packageCategory = "dc"
+                setPackageBase = "set/weblogic-dc-ora"
+
+            }
+            "dc-db-oracle-uninstall" {
+                pathInsideArchive = "dc-db-oracle-uninstall-${project.release.buildVersion}"
+                packageCategory = "dc"
+                setPackageBase = "set/weblogic-dc-ora-uninstall"
+            }
+        }
+
+        artifactRepository = ["url" : "https://sources.corp.tander.ru/svn/real_out/pkg/distfiles"]
+        repository         = ["url" : "https://sources.corp.tander.ru/svn/real_out/pkg/repository"]
+        masterRepository   = ["url" : "https://sources.corp.tander.ru/svn/real_out/pkg/repository"]
+    }
+
+    dbrelease {
+
+        installPackageName = "${projectName}"
+        uninstallPackageName = "${projectName}"
+
+        systemName                  = '${systemName}'
+        spprDeliveryNumber          = 'undefined'
+
+        charset                     = 'windows-1251'
+        dbReleaseTemplate           = 'template/dbrelease.sql.tmpl'
+        schemaBeforeTemplate        = 'template/schema.before.sql.tmpl'
+        schemaAfterTemplate         = 'template/schema.after.sql.tmpl'
+        scmFileTemplate             = 'template/scmfile.sql.tmpl'
+
+        monopolyInstall             = true
+        checkReleaseNumberRequired  = true
+        updateReleaseNumberRequired = true
+        updateRevisionNumberRequired= true
+
+        schemas = [
+            ${schemasList}
+        ]
+        sectionWildcards = [
+        'TMPL_SCRIPT_BEFORE_INSTALL': [
+                '*/commands/before/*',
+                '*/data/before/*',
+                '*/sequences/*',
+                '*/types/before/*_rec.tps',
+                '*/types/before/*_obj.tps',
+                '*/types/before/*_tab.tps',
+                '*/types/after/*_rec.tps',
+                '*/types/after/*_obj.tps',
+                '*/types/after/*_tab.tps',
+                '*/types/*.tps',
+                '*/tables/*.tbl',
+                '*/tables/*.alt',
+                '*/constraints/*',
+                '*/queues/*',
+                '*/functions/*',
+                '*/views/*',
+                '*/materialized_views/*',
+                '*/synonyms/*',
+                '*/procedures/*',
+                '*/packages/*',
+                '*/package_bodies/*',
+                '*/jobs/*',
+                '*/triggers/*',
+                '*/data/*',
+                '*/comments/*'
+        ],
+        'TMPL_SCRIPT_AFTER_INSTALL' : [
+                '*/commands/install/*',
+				'*/commands/after/*',
+                '*/indicators/*',
+                '*/processes/after/*',
+                '*/dictionary/*'
+        ]
+]
+
+        sectionWildcardsUninstall = [
+        'TMPL_SCRIPT_BEFORE_INSTALL': [
+                '*/commands/before/*',
+                '*/data/before/*',
+                '*/sequences/*',
+                '*/types/*_rec_t.tps',
+                '*/types/*_rec_t.sql',
+                '*/types/*_tab_t.tps',
+                '*/types/*_tab_t.sql',
+                '*/types/*_rec_t.uninstall.tps',
+                '*/types/*_rec_t.uninstall.sql',
+                '*/types/*_tab_t.uninstall.tps',
+                '*/types/*_tab_t.uninstall.sql',
+                '*/types/*.tps',
+                '*/types/*.sql',
+                '*/tables/*.tbl',
+                '*/tables/*.tab',
+                '*/tables/*.alt',
+                '*/tables/*.sql',
+                '*/comments/*',
+                '*/constraints/*',
+                '*/queues/*',
+                '*/types/*.tpsalt',
+                '*/functions/*',
+                '*/views/*',
+                '*/materialized_views/*',
+                '*/synonyms/*',
+                '*/triggers/*',
+                '*/procedures/*',
+                '*/packages/*',
+                '*/package_bodies/*',                
+                '*/jobs/*',
+                '*/data/*'
+        ],
+        'TMPL_SCRIPT_AFTER_INSTALL' : [
+                '*/data/after/*',
+                '*/commands/uninstall/*',
+                '*/commands/after/*.uninstall.sql',
+				'*/commands/after/*.',
+                '*/indicators/*',
+                '*/processes/after/*',
+                '*/dictionary/*'
+        ]
+]
+        excludeFiles = [
+            "*.gradle",
+            ".gradle",
+            "template",
+            "README.md",
+            "Install.sql",
+            "uninstall.sql"
+        ]
+    }
+}
+
+
+task distribution {
+   dependsOn dbReleaseBuild
+}
+
